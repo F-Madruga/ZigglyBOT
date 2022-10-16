@@ -1,0 +1,32 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Debug (unit tests)",
+			"type": "node",
+			"request": "launch",
+			"protocol": "inspector",
+			"program": "${workspaceRoot}/node_modules/.bin/jest",
+			// There's no way to disable jest timeout which is useful when
+			// doing step by step debugging. We set it to the max 32 bit number
+			// that jest supports to "disable" timeout in practice.
+			"args": ["--testTimeout=2147483647", "--runInBand"],
+			"skipFiles": ["<node_internals>/**/*.js"],
+			"cwd": "${workspaceFolder}"
+		},
+		{
+			"name": "Debug (container)",
+			"type": "node",
+			"request": "attach",
+			"protocol": "inspector",
+			"port": 5331,
+			"localRoot": "${workspaceRoot}",
+			"remoteRoot": "/app",
+			"restart": true,
+			"skipFiles": ["<node_internals>/**/*.js"],
+			"sourceMapPathOverrides": {
+				"/app/src/*": "${workspaceRoot}/src/*"
+			}
+		}
+	]
+}

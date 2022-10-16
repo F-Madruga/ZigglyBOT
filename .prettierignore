@@ -1,0 +1,5 @@
+package.json
+package-lock.json
+testdata
+dist
+.deploy/helm/templates/configmap.yml

@@ -1,0 +1,2 @@
+Add bot to server
+https://discord.com/oauth2/authorize?client_id=CLIENT_ID&scope=bot&guild_id=GUILD_ID$permissions=326417517568
