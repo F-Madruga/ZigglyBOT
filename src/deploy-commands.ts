@@ -1,6 +1,6 @@
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
-import config from './config';
+import discordConfig from './config';
 import * as commandModules from './commands';
 
 type Command = {
@@ -13,9 +13,11 @@ for (const module of Object.values<Command>(commandModules)) {
 	commands.push(module.data);
 }
 
-const rest = new REST({ version: '9' }).setToken(config.DISCORD_TOKEN);
+const rest = new REST({ version: '9' }).setToken(discordConfig.discordToken);
 
-rest.put(Routes.applicationGuildCommands(config.CLIENT_ID, config.GUILD_ID), { body: commands })
+rest.put(Routes.applicationGuildCommands(discordConfig.clientId, discordConfig.guildId), {
+	body: commands,
+})
 	.then(() => {
 		console.log('Successfully registered application commands');
 	})

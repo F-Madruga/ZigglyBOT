@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { CommandInteraction, Client, ChannelType, TextChannel } from 'discord.js';
+import { CommandInteraction, ChannelType, TextChannel } from 'discord.js';
+import { Bot } from '../bot';
 
 export const data = new SlashCommandBuilder()
 	.setName('help')
@@ -8,7 +9,8 @@ export const data = new SlashCommandBuilder()
 		option.setName('description').setDescription('Describe your problem').setRequired(true),
 	);
 
-export async function execute(interaction: CommandInteraction, client: Client) {
+export async function execute(interaction: CommandInteraction, bot: Bot) {
+	const { client } = bot;
 	if (!interaction?.channelId) {
 		return;
 	}
@@ -23,10 +25,10 @@ export async function execute(interaction: CommandInteraction, client: Client) {
 		reason: `Support ticket ${Date.now()}`,
 	});
 
-	const problemDescription = interaction.options.get('description')!;
+	const problemDescription = interaction.options.get('description')!.value;
 	const { user } = interaction;
 	thread.send(`**User:** <${user}>
-	**Problem:** ${problemDescription.value}`);
+	**Problem:** ${problemDescription}`);
 
 	interaction.reply({
 		content: 'Help is on the way!',

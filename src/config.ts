@@ -6,10 +6,16 @@ if (!CLIENT_ID || !GUILD_ID || !DISCORD_TOKEN) {
 	throw new Error('Missing environment variables');
 }
 
-const config: Record<string, string> = {
-	CLIENT_ID,
-	GUILD_ID,
-	DISCORD_TOKEN,
+export type DiscordConfig = {
+	clientId: string;
+	guildId: string;
+	discordToken: string;
 };
 
-export default config;
+const discordConfig: DiscordConfig = {
+	clientId: CLIENT_ID,
+	guildId: GUILD_ID,
+	discordToken: DISCORD_TOKEN,
+};
+
+export default discordConfig;
