@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { QueryType } from 'discord-player';
 import { CommandInteraction } from 'discord.js';
 import { Bot } from '../../bot';
+import * as musicManager from '../../managers/music-manager';
 
 export const data = new SlashCommandBuilder()
 	.setName('play')
@@ -11,61 +11,20 @@ export const data = new SlashCommandBuilder()
 	);
 
 export async function execute(interaction: CommandInteraction, bot: Bot) {
-	const { client, ctx } = bot;
-	const { discordConfig } = ctx;
-	const { guildId } = discordConfig;
-	const userId = interaction.user.id;
-
-	const guild = await client.guilds.fetch(guildId);
-	const member = await guild.members.fetch(userId);
-	const voiceChannel = member.voice.channel;
-
-	if (!voiceChannel) {
-		interaction.reply({
-			content: 'You are not in a voice channel!',
-			ephemeral: true,
-		});
-		return;
-	}
-
+	const { user } = interaction;
 	const query = interaction.options.get('query')!.value;
+	let reply: string;
+
 	if (!query || typeof query !== 'string') {
-		interaction.reply({
-			content: 'Invalid query',
-			ephemeral: true,
-		});
+		reply = 'Invalid query';
 		return;
 	}
 
-	const queue = bot.player.createQueue(guild, {
-		metadata: {
-			voiceChannel,
-		},
+	reply = await musicManager.play({
+		bot,
+		user,
+		query,
 	});
 
-	try {
-		if (!queue.connection) await queue.connect(voiceChannel);
-	} catch {
-		queue.destroy();
-		await interaction.reply({
-			content: 'Could not join your voice channel!',
-			ephemeral: true,
-		});
-		return;
-	}
-
-	await interaction.deferReply();
-	const track = await bot.player
-		.search(query, {
-			requestedBy: interaction.user,
-		})
-		.then((x) => x.tracks[0]);
-	if (!track) {
-		await interaction.followUp({ content: `Track **${query}** not found!` });
-		return;
-	}
-
-	queue.play(track);
-
-	await interaction.followUp({ content: `Loading track **${track.title}**!` });
+	await interaction.reply({ content: reply });
 }

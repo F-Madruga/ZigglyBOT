@@ -3,8 +3,11 @@ import { Player } from 'discord-player';
 import discordConfig, { DiscordConfig } from './config';
 import * as commandModules from './commands';
 import 'discord-player/smoothVolume';
+import logger from './tools/logger';
+import { Logger } from 'pino';
 
 export type Context = {
+	logger: Logger;
 	discordConfig: DiscordConfig;
 };
 
@@ -36,15 +39,16 @@ const bot: Bot = {
 	client,
 	player,
 	ctx: {
+		logger,
 		discordConfig,
 	},
 };
 
-client.once('ready', () => {
+bot.client.once('ready', () => {
 	console.log('ZigglyBOT ready');
 });
 
-client.on('interactionCreate', async (interaction) => {
+bot.client.on('interactionCreate', async (interaction) => {
 	if (!interaction.isCommand()) {
 		return;
 	}
@@ -52,6 +56,6 @@ client.on('interactionCreate', async (interaction) => {
 	commands[commandName].execute(interaction, bot);
 });
 
-client.login(bot.ctx.discordConfig.discordToken);
+bot.client.login(bot.ctx.discordConfig.discordToken);
 
 export default bot;
