@@ -1,6 +1,5 @@
-import { Track } from 'discord-player';
 import { User } from 'discord.js';
-import { Bot } from '../../bot';
+import { Bot } from '../bot';
 
 interface PlayArgs {
 	bot: Bot;
@@ -10,9 +9,8 @@ interface PlayArgs {
 
 export async function play(args: PlayArgs): Promise<string> {
 	const { bot, query, user } = args;
-	const { client, ctx } = bot;
-	const { discordConfig } = ctx;
-	const { guildId } = discordConfig;
+	const { client, config } = bot;
+	const { guildId } = config;
 
 	const guild = await client.guilds.fetch(guildId);
 	const member = await guild.members.fetch(user.id);
@@ -52,4 +50,25 @@ export async function play(args: PlayArgs): Promise<string> {
 	queue.play(track);
 
 	return `Loading track **${track.title}**!`;
+}
+
+interface PauseArgs {
+	bot: Bot;
+}
+
+export async function pause(args: PauseArgs): Promise<string> {
+	const { bot } = args;
+	const { config, player } = bot;
+	const { guildId } = config;
+
+	const queue = player.getQueue(guildId);
+	if (!queue || !queue.playing) {
+		return 'No music is being played!';
+	}
+
+	const paused = queue.setPaused(true);
+	if (!paused) {
+		return 'Something went wrong!';
+	}
+	return 'Music paused';
 }

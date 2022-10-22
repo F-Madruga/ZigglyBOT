@@ -1,20 +1,20 @@
 import { Client, GatewayIntentBits } from 'discord.js';
 import { Player } from 'discord-player';
-import discordConfig, { DiscordConfig } from './config';
 import * as commandModules from './commands';
 import 'discord-player/smoothVolume';
-import logger from './tools/logger';
-import { Logger } from 'pino';
+import { CLIENT_ID, DISCORD_TOKEN, GUILD_ID } from './constants';
 
-export type Context = {
-	logger: Logger;
-	discordConfig: DiscordConfig;
+export type DiscordConfig = {
+	clientId: string;
+	guildId: string;
+	token: string;
 };
 
 export type Bot = {
 	client: Client;
 	player: Player;
-	ctx: Context;
+	commands: any;
+	config: DiscordConfig;
 };
 
 const commands = Object(commandModules);
@@ -38,9 +38,11 @@ const player = new Player(client, {
 const bot: Bot = {
 	client,
 	player,
-	ctx: {
-		logger,
-		discordConfig,
+	commands,
+	config: {
+		clientId: CLIENT_ID,
+		guildId: GUILD_ID,
+		token: DISCORD_TOKEN,
 	},
 };
 
@@ -53,9 +55,9 @@ bot.client.on('interactionCreate', async (interaction) => {
 		return;
 	}
 	const { commandName } = interaction;
-	commands[commandName].execute(interaction, bot);
+	bot.commands[commandName].execute(interaction, bot);
 });
 
-bot.client.login(bot.ctx.discordConfig.discordToken);
+bot.client.login(bot.config.token);
 
 export default bot;

@@ -17,6 +17,7 @@ export async function execute(interaction: CommandInteraction, bot: Bot) {
 
 	if (!query || typeof query !== 'string') {
 		reply = 'Invalid query';
+		await interaction.reply({ content: reply });
 		return;
 	}
 
