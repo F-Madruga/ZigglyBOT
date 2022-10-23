@@ -1,12 +1,5 @@
-type Command = {
-	prefix: string;
-	options: any;
-};
-
-type CustomCommand = {
-	name: string;
-	commands: string[];
-};
+import { User } from 'discord.js';
+import { CustomCommand } from '../entities/custom-command';
 
 const customCommands: CustomCommand[] = [];
 

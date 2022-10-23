@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { CommandInteraction, InteractionReplyOptions } from 'discord.js';
-import { Bot, ExecuteArgs, ValidateCommandArgs } from '../../bot';
+import { CommandInteraction, InteractionReplyOptions, User } from 'discord.js';
+import { Bot, ExecuteArgs, GetCommandArgs } from '../../bot';
 import * as customCommandsManager from '../../managers/custom-command-manager';
 
 export const data = new SlashCommandBuilder()
@@ -19,41 +19,51 @@ export const data = new SlashCommandBuilder()
 	);
 
 interface ExecuteCreateArgs extends ExecuteArgs {
-	commandName: string;
-	commands: string;
+	command: string;
+	execute: string;
+	interaction: CommandInteraction;
 }
 
-export function validateCommand(args: ValidateCommandArgs): ExecuteCreateArgs {
-	const { interaction, bot } = args;
-	const commandName = interaction.options.get('command')!.value;
-	const commands = interaction.options.get('execute')!.value;
+export function getExecuteArgs(args: GetCommandArgs): ExecuteCreateArgs {
+	const { interaction } = args;
+	const command = interaction.options.get('command')!.value;
+	const execute = interaction.options.get('execute')!.value;
 
-	if (!commandName || typeof commandName !== 'string') {
+	const commandArgs = validateCommand({
+		command,
+		execute,
+		interaction,
+	});
+
+	return commandArgs;
+}
+
+export function validateCommand(args: any): ExecuteCreateArgs {
+	const { command, execute, interaction } = args;
+
+	if (!command || typeof command !== 'string') {
 		throw new Error('Invalid command name');
 	}
 
-	if (!commands || typeof commands !== 'string') {
+	if (!execute || typeof execute !== 'string') {
 		throw new Error('Invalid commands to execute');
 	}
 
 	return {
-		commandName,
-		commands,
-		bot,
+		command,
+		execute,
+		interaction,
 	};
 }
 
-export async function execute(args: ExecuteCreateArgs): Promise<InteractionReplyOptions> {
-	const { commandName, commands, bot } = args;
+export async function execute(args: ExecuteCreateArgs, bot: Bot): Promise<InteractionReplyOptions> {
+	const { command, execute, interaction } = args;
 
-	let reply: string;
-
-	const commandsData = commands.split(',').map((command) => command.replace('/', '').trim());
-
-	reply = customCommandsManager.create({
+	const reply = customCommandsManager.create({
+		interaction,
 		bot,
-		commandName,
-		commands: commandsData,
+		command,
+		commands: execute.split(',').map((command) => command.replace('/', '').trim()),
 	});
 
 	return { content: reply };

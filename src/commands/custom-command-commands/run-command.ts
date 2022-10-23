@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction, InteractionReplyOptions } from 'discord.js';
-import { Bot, ExecuteArgs, ValidateCommandArgs } from '../../bot';
+import { Bot, ExecuteArgs, GetCommandArgs } from '../../bot';
 import * as customCommandsManager from '../../managers/custom-command-manager';
 
 export const data = new SlashCommandBuilder()
@@ -14,37 +14,40 @@ export const data = new SlashCommandBuilder()
 	);
 
 interface ExecuteRunArgs extends ExecuteArgs {
-	commandName: string;
+	command: string;
+	interaction: CommandInteraction;
 }
 
-export function validateCommand(args: ValidateCommandArgs): ExecuteRunArgs {
-	const { interaction, bot } = args;
-	const commandName = interaction.options.get('command')!.value;
+export function getExecuteArgs(args: GetCommandArgs): ExecuteRunArgs {
+	const { interaction } = args;
+	const command = interaction.options.get('command')!.value;
 
-	if (!commandName || typeof commandName !== 'string') {
+	const commandArgs = validateCommand({
+		command,
+		interaction,
+	});
+
+	return commandArgs;
+}
+
+export function validateCommand(args: any): ExecuteRunArgs {
+	const { command, interaction } = args;
+
+	if (!command || typeof command !== 'string') {
 		throw new Error('Invalid command name');
 	}
 
 	return {
-		commandName,
-		bot,
+		interaction,
+		command,
 	};
 }
 
-export async function execute(args: ExecuteRunArgs): Promise<InteractionReplyOptions> {
-	const { commandName } = args;
+export async function execute(args: ExecuteRunArgs, bot: Bot): Promise<InteractionReplyOptions> {
+	const { command, interaction } = args;
 
-	let reply: string;
-
-	const customCommand = customCommandsManager.getByName({
-		commandName,
-	});
-
-	if (!customCommand) {
-		throw new Error(`Command ${commandName} does not exists`);
-	}
-
-	reply = `/${customCommand?.commands[0]}`;
+	const reply = customCommandsManager.run({ command, interaction, bot });
+	console.log(reply);
 
 	return { content: reply };
 }

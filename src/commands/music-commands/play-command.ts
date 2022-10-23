@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { CommandInteraction, InteractionReplyOptions, User } from 'discord.js';
-import { Bot, ExecuteArgs, ValidateCommandArgs } from '../../bot';
+import { InteractionReplyOptions, User } from 'discord.js';
+import { Bot, ExecuteArgs, GetCommandArgs } from '../../bot';
 import * as musicManager from '../../managers/music-manager';
 
 export const data = new SlashCommandBuilder()
@@ -15,10 +15,24 @@ interface ExecutePlayArgs extends ExecuteArgs {
 	query: string;
 }
 
-export function validateCommand(args: ValidateCommandArgs): ExecutePlayArgs {
-	const { interaction, bot } = args;
+export const requiredInteractionProperties = new Set<string>(['user']);
+
+export function getExecuteArgs(args: GetCommandArgs): ExecutePlayArgs {
+	const { interaction } = args;
 	const { user } = interaction;
+	console.log(user);
 	const query = interaction.options.get('query')!.value;
+
+	const commandArgs = validateCommand({
+		user,
+		query,
+	});
+
+	return commandArgs;
+}
+
+export function validateCommand(args: any): ExecutePlayArgs {
+	const { query, user } = args;
 
 	if (!query || typeof query !== 'string') {
 		throw new Error('Invalid query');
@@ -27,12 +41,11 @@ export function validateCommand(args: ValidateCommandArgs): ExecutePlayArgs {
 	return {
 		user,
 		query,
-		bot,
 	};
 }
 
-export async function execute(args: ExecutePlayArgs): Promise<InteractionReplyOptions> {
-	const { user, query, bot } = args;
+export async function execute(args: ExecutePlayArgs, bot: Bot): Promise<InteractionReplyOptions> {
+	const { user, query } = args;
 
 	const reply = await musicManager.play({
 		bot,

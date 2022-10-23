@@ -1,12 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import {
-	CommandInteraction,
-	ChannelType,
-	TextChannel,
-	InteractionReplyOptions,
-	User,
-} from 'discord.js';
-import { Bot, ExecuteArgs, ValidateCommandArgs } from '../bot';
+import { ChannelType, TextChannel, InteractionReplyOptions, User } from 'discord.js';
+import { Bot, ExecuteArgs, GetCommandArgs } from '../bot';
 
 export const data = new SlashCommandBuilder()
 	.setName('help')
@@ -18,28 +12,39 @@ export const data = new SlashCommandBuilder()
 interface ExecuteHelpArgs extends ExecuteArgs {
 	user: User;
 	channelId: string;
-	problemDescription: string;
+	description: string;
 }
 
-export function validateCommand(args: ValidateCommandArgs): ExecuteHelpArgs {
-	const { interaction, bot } = args;
+export function getExecuteArgs(args: GetCommandArgs): ExecuteHelpArgs {
+	const { interaction } = args;
 	const { channelId, user } = interaction;
-	const problemDescription = interaction.options.get('description')!.value;
+	const description = interaction.options.get('description')!.value;
 
-	if (!problemDescription || typeof problemDescription !== 'string') {
+	const commandArgs = validateCommand({
+		user,
+		channelId,
+		description,
+	});
+
+	return commandArgs;
+}
+
+export function validateCommand(args: any): ExecuteHelpArgs {
+	const { user, channelId, description } = args;
+
+	if (!description || typeof description !== 'string') {
 		throw new Error('Invalid problem description');
 	}
 
 	return {
 		user,
-		bot,
 		channelId,
-		problemDescription,
+		description,
 	};
 }
 
-export async function execute(args: ExecuteHelpArgs): Promise<InteractionReplyOptions> {
-	const { user, bot, channelId, problemDescription } = args;
+export async function execute(args: ExecuteHelpArgs, bot: Bot): Promise<InteractionReplyOptions> {
+	const { user, channelId, description } = args;
 	const { client } = bot;
 	if (!channelId) {
 		return { content: '' };
@@ -56,7 +61,7 @@ export async function execute(args: ExecuteHelpArgs): Promise<InteractionReplyOp
 	});
 
 	thread.send(`**User:** <${user}>
-	**Problem:** ${problemDescription}`);
+	**Problem:** ${description}`);
 
 	return { content: 'Help is on the way!' };
 }
