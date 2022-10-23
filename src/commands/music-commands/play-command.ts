@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { CommandInteraction } from 'discord.js';
-import { Bot } from '../../bot';
+import { CommandInteraction, InteractionReplyOptions, User } from 'discord.js';
+import { Bot, ExecuteArgs, ValidateCommandArgs } from '../../bot';
 import * as musicManager from '../../managers/music-manager';
 
 export const data = new SlashCommandBuilder()
@@ -10,22 +10,35 @@ export const data = new SlashCommandBuilder()
 		option.setName('query').setDescription('Link for you song').setRequired(true),
 	);
 
-export async function execute(interaction: CommandInteraction, bot: Bot) {
+interface ExecutePlayArgs extends ExecuteArgs {
+	user: User;
+	query: string;
+}
+
+export function validateCommand(args: ValidateCommandArgs): ExecutePlayArgs {
+	const { interaction, bot } = args;
 	const { user } = interaction;
 	const query = interaction.options.get('query')!.value;
-	let reply: string;
 
 	if (!query || typeof query !== 'string') {
-		reply = 'Invalid query';
-		await interaction.reply({ content: reply });
-		return;
+		throw new Error('Invalid query');
 	}
 
-	reply = await musicManager.play({
+	return {
+		user,
+		query,
+		bot,
+	};
+}
+
+export async function execute(args: ExecutePlayArgs): Promise<InteractionReplyOptions> {
+	const { user, query, bot } = args;
+
+	const reply = await musicManager.play({
 		bot,
 		user,
 		query,
 	});
 
-	await interaction.reply({ content: reply });
+	return { content: reply };
 }

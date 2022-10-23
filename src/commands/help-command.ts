@@ -1,6 +1,12 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { CommandInteraction, ChannelType, TextChannel } from 'discord.js';
-import { Bot } from '../bot';
+import {
+	CommandInteraction,
+	ChannelType,
+	TextChannel,
+	InteractionReplyOptions,
+	User,
+} from 'discord.js';
+import { Bot, ExecuteArgs, ValidateCommandArgs } from '../bot';
 
 export const data = new SlashCommandBuilder()
 	.setName('help')
@@ -9,15 +15,39 @@ export const data = new SlashCommandBuilder()
 		option.setName('description').setDescription('Describe your problem').setRequired(true),
 	);
 
-export async function execute(interaction: CommandInteraction, bot: Bot) {
-	const { client } = bot;
-	if (!interaction?.channelId) {
-		return;
+interface ExecuteHelpArgs extends ExecuteArgs {
+	user: User;
+	channelId: string;
+	problemDescription: string;
+}
+
+export function validateCommand(args: ValidateCommandArgs): ExecuteHelpArgs {
+	const { interaction, bot } = args;
+	const { channelId, user } = interaction;
+	const problemDescription = interaction.options.get('description')!.value;
+
+	if (!problemDescription || typeof problemDescription !== 'string') {
+		throw new Error('Invalid problem description');
 	}
 
-	const channel = await client.channels.fetch(interaction.channelId);
+	return {
+		user,
+		bot,
+		channelId,
+		problemDescription,
+	};
+}
+
+export async function execute(args: ExecuteHelpArgs): Promise<InteractionReplyOptions> {
+	const { user, bot, channelId, problemDescription } = args;
+	const { client } = bot;
+	if (!channelId) {
+		return { content: '' };
+	}
+
+	const channel = await client.channels.fetch(channelId);
 	if (!channel || channel.type !== ChannelType.GuildText) {
-		return;
+		return { content: '' };
 	}
 
 	const thread = await (channel as TextChannel).threads.create({
@@ -25,13 +55,8 @@ export async function execute(interaction: CommandInteraction, bot: Bot) {
 		reason: `Support ticket ${Date.now()}`,
 	});
 
-	const problemDescription = interaction.options.get('description')!.value;
-	const { user } = interaction;
 	thread.send(`**User:** <${user}>
 	**Problem:** ${problemDescription}`);
 
-	interaction.reply({
-		content: 'Help is on the way!',
-		ephemeral: true, // only the user o send the command will see the thread
-	});
+	return { content: 'Help is on the way!' };
 }

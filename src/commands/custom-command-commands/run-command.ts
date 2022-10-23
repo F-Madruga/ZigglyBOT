@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { CommandInteraction } from 'discord.js';
-import { Bot } from '../../bot';
+import { CommandInteraction, InteractionReplyOptions } from 'discord.js';
+import { Bot, ExecuteArgs, ValidateCommandArgs } from '../../bot';
 import * as customCommandsManager from '../../managers/custom-command-manager';
 
 export const data = new SlashCommandBuilder()
@@ -13,27 +13,38 @@ export const data = new SlashCommandBuilder()
 			.setRequired(true),
 	);
 
-export async function execute(interaction: CommandInteraction, bot: Bot) {
+interface ExecuteRunArgs extends ExecuteArgs {
+	commandName: string;
+}
+
+export function validateCommand(args: ValidateCommandArgs): ExecuteRunArgs {
+	const { interaction, bot } = args;
 	const commandName = interaction.options.get('command')!.value;
-	let reply: string;
 
 	if (!commandName || typeof commandName !== 'string') {
-		reply = 'Invalid command name';
-		await interaction.reply({ content: reply });
-		return;
+		throw new Error('Invalid command name');
 	}
+
+	return {
+		commandName,
+		bot,
+	};
+}
+
+export async function execute(args: ExecuteRunArgs): Promise<InteractionReplyOptions> {
+	const { commandName } = args;
+
+	let reply: string;
 
 	const customCommand = customCommandsManager.getByName({
 		commandName,
 	});
 
 	if (!customCommand) {
-		reply = `Command ${commandName} does not exists`;
-		await interaction.reply({ content: reply });
-		return;
+		throw new Error(`Command ${commandName} does not exists`);
 	}
 
 	reply = `/${customCommand?.commands[0]}`;
 
-	await interaction.reply({ content: reply });
+	return { content: reply };
 }

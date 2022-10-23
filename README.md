@@ -25,3 +25,17 @@ npm run deploy:commands
 ```shell
 npm run start
 ```
+
+# Some notes
+
+## Add bot to server
+
+https://discord.com/oauth2/authorize?client_id=CLIENT_ID&scope=bot&guild_id=GUILD_ID$permissions=8
+
+## Applications settings
+
+https://discord.com/developers/applications
+
+## Permissions
+
+8

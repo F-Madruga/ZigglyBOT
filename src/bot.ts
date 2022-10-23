@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits } from 'discord.js';
+import { Client, CommandInteraction, GatewayIntentBits, InteractionReplyOptions } from 'discord.js';
 import { Player } from 'discord-player';
 import * as commandModules from './commands';
 import 'discord-player/smoothVolume';
@@ -16,6 +16,15 @@ export type Bot = {
 	commands: any;
 	config: DiscordConfig;
 };
+
+export type ValidateCommandArgs = {
+	interaction: CommandInteraction;
+	bot: Bot;
+};
+
+export interface ExecuteArgs {
+	bot: Bot;
+}
 
 const commands = Object(commandModules);
 
@@ -55,7 +64,14 @@ bot.client.on('interactionCreate', async (interaction) => {
 		return;
 	}
 	const { commandName } = interaction;
-	bot.commands[commandName].execute(interaction, bot);
+	let reply: InteractionReplyOptions;
+	try {
+		const executeArgs = bot.commands[commandName].validateCommand({ interaction, bot });
+		reply = await bot.commands[commandName].execute(executeArgs);
+	} catch (err) {
+		reply = { content: err.message };
+	}
+	await interaction.reply(reply);
 });
 
 bot.client.login(bot.config.token);
