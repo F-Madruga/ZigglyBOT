@@ -20,7 +20,7 @@ export const requiredInteractionProperties = new Set<string>(['user']);
 export function getExecuteArgs(args: GetCommandArgs): ExecutePlayArgs {
 	const { interaction } = args;
 	const { user } = interaction;
-	console.log(user);
+
 	const query = interaction.options.get('query')!.value;
 
 	const commandArgs = validateCommand({

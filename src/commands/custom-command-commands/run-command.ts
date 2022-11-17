@@ -47,7 +47,6 @@ export async function execute(args: ExecuteRunArgs, bot: Bot): Promise<Interacti
 	const { command, interaction } = args;
 
 	const reply = customCommandsManager.run({ command, interaction, bot });
-	console.log(reply);
 
 	return { content: reply };
 }

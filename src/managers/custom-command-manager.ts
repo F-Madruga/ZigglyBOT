@@ -29,8 +29,6 @@ export function create(args: CreateArgs): string {
 			...requiredInteractionPropertiesOptions,
 		};
 
-		console.log(prefix);
-
 		bot.commands[prefix].validateCommand(commandArgs);
 
 		return {
