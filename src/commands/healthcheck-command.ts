@@ -1,28 +1,41 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { InteractionReplyOptions } from 'discord.js';
-import { Bot, ExecuteArgs, GetCommandArgs } from '../bot';
+import { CommandInteraction, SlashCommandBuilder } from 'discord.js';
+import { Command, CommandArgs } from '../discord-bot';
 
-export const data = new SlashCommandBuilder().setName('healthcheck').setDescription('Replies ok');
+const prefix = 'healthcheck';
 
-interface ExecuteHealthCheckArgs extends ExecuteArgs {}
+const data = new SlashCommandBuilder().setName('healthcheck').setDescription('Replies ok');
 
-export function getExecuteArgs(args: GetCommandArgs): ExecuteHealthCheckArgs {
-	const {} = args;
-
-	const commandArgs = validateCommand({});
-
-	return commandArgs;
+function getArgs(interaction: CommandInteraction, args: CommandArgs): CommandArgs {
+	return args;
 }
 
-export function validateCommand(args: any): ExecuteHealthCheckArgs {
-	const {} = args;
-
-	return {};
+function validateCommandArgs(args: CommandArgs): CommandArgs {
+	return args;
 }
 
-export async function execute(
-	args: ExecuteHealthCheckArgs,
-	bot: Bot,
-): Promise<InteractionReplyOptions> {
-	return { content: 'ok' };
+function execute(interaction: CommandInteraction, args: CommandArgs) {
+	return;
 }
+
+function reply(interaction: CommandInteraction, args: CommandArgs) {
+	return interaction.reply({ content: 'ok' });
+}
+
+function errorHandler(
+	error: any,
+	interaction: CommandInteraction,
+	args?: CommandArgs,
+	result?: any,
+) {
+	return;
+}
+
+export const command: Command = {
+	prefix,
+	data,
+	getArgs,
+	validateCommandArgs,
+	execute,
+	reply,
+	errorHandler,
+};

@@ -1,7 +1,7 @@
 import 'dotenv-safe/config';
 
-export const { CLIENT_ID, GUILD_ID, DISCORD_TOKEN } = process.env;
+export const { DISCORD_TOKEN, CLIENT_ID, GUILD_ID } = process.env;
 
-if (!CLIENT_ID || !GUILD_ID || !DISCORD_TOKEN) {
+if (!DISCORD_TOKEN || !CLIENT_ID || !GUILD_ID) {
 	throw new Error('Missing environment variables');
 }
