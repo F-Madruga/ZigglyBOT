@@ -8,8 +8,9 @@ module.exports = {
 		es2017: true,
 		jest: true,
 	},
-	parseOptions: {
+	parserOptions: {
 		ecmaVersion: 9,
+		sourceType: 'module',
 	},
 	rules: {
 		// ES5
@@ -97,7 +98,7 @@ module.exports = {
 		{
 			files: ['src/entities/**', 'src/tools/**'],
 			rules: {
-				'camelcase': 'off',
+				camelcase: 'off',
 			},
 		},
 		{
