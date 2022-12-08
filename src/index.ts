@@ -1,55 +1,34 @@
 import { CLIENT_ID, DISCORD_TOKEN, GUILD_ID } from './constants';
-import { createDiscordBot } from './discord-bot';
+import { createDiscordBot, deployCommands, runCommand } from './discord-bot';
 
-const discordBot = createDiscordBot({
-	token: DISCORD_TOKEN,
-	clientId: CLIENT_ID,
-	guildId: GUILD_ID,
-});
+async function main() {
+	const discordBot = createDiscordBot({
+		token: DISCORD_TOKEN,
+		clientId: CLIENT_ID,
+		guildId: GUILD_ID,
+	});
 
-discordBot.client.once('ready', () => {
-	console.log('Discord bot ready');
-});
+	await deployCommands(discordBot)
+		.then(() => {
+			console.log('Discord bot commands deployed successfully');
+		})
+		.catch(console.error);
 
-discordBot.client.on('interactionCreate', async (interaction) => {
-	if (!interaction.isCommand()) {
-		return;
-	}
+	discordBot.client.on('ready', () => {
+		console.log('Discord bot started successfully');
+	});
 
-	const { commandName } = interaction;
-	const command = discordBot.commands.get(commandName);
+	discordBot.client.on('interactionCreate', async (interaction) => {
+		if (!interaction.isCommand()) {
+			return;
+		}
 
-	if (!command) {
-		return;
-	}
+		await runCommand(discordBot, interaction);
+	});
 
-	let commandArgs;
-	try {
-		commandArgs = command.getArgs(interaction);
-	} catch (error) {
-		command.errorHandler(error, interaction, commandArgs);
-		return;
-	}
+	discordBot.client.login(discordBot.config.token);
+}
 
-	try {
-		commandArgs = command.validateCommandArgs(commandArgs);
-	} catch (error) {
-		command.errorHandler(error, interaction, commandArgs);
-		return;
-	}
-
-	let result;
-	try {
-		result = command.execute(interaction, commandArgs);
-	} catch (error) {
-		command.errorHandler(error, interaction, commandArgs, result);
-		return;
-	}
-
-	try {
-		command.reply(interaction, commandArgs, result);
-	} catch (error) {
-		command.errorHandler(error, interaction, commandArgs, result);
-		return;
-	}
+main().catch((error) => {
+	console.error(error);
 });
