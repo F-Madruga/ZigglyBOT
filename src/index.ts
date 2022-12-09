@@ -33,7 +33,11 @@ async function main() {
 			return;
 		}
 
-		await runCommand(discordBot, interaction);
+		try {
+			await runCommand(discordBot, interaction);
+		} catch (error) {
+			logger.error(error);
+		}
 	});
 
 	discordBot.client.login(discordBot.config.token);
