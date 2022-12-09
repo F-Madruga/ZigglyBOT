@@ -1,41 +1,60 @@
 # ZigglyBOT
 
-# Getting started
+## Requirements
 
-## 1 Install dependencies
+- [docker](https://www.docker.com/)
+- docker-compose (usually installed with docker)
 
-```shell
-npm install
+## Set enviromment variables (required)
+
+Create a `.env` file with the following format:
+
+```
+NODE_ENV=
+LOGGER_LEVEL=
+DISCORD_TOKEN=
+CLIENT_ID=
+GUILD_ID=
 ```
 
-## 2 Compile the code from TypeScript to JavaScript
+`NODE_ENV` can be one of the following:
 
-```shell
-npm run build
-```
+- `prod` (recommended to run the bot)
+- `dev`
+- `test`
 
-## 3 Deploy the commands
+`LOGGER_LEVEL` can be one of the following:
 
-```shell
-npm run deploy:commands
-```
+- `info` (recommended to run the bot)
+- `debug`
+- `trace`
+- `fatal`
+- `error`
+- `warn`
 
-## 3 Start bot
+How to get `DISCORD_TOKEN`, `CLIENT_ID` and `GUILD_ID`?
 
-```shell
-npm run start
-```
+- https://youtu.be/4IxLBKPVyXE?t=695
 
-# Some notes
+## Useful links
 
-## Add bot to server
-
+Add bot to server (replace `CLIENT_ID` and `GUILD_ID`):
 https://discord.com/oauth2/authorize?client_id=CLIENT_ID&scope=bot&guild_id=GUILD_ID$permissions=8
 
-## Applications settings
-
-https://discord.com/developers/applications
+Applications settings: https://discord.com/developers/applications
 
 ## Permissions
 
 8
+
+## Start ZigglyBOT
+
+```shell
+npm run docker:compose:up
+```
+
+## Stop ZigglyBOT
+
+```shell
+npm run docker:compose:down
+```

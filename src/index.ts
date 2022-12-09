@@ -1,4 +1,3 @@
-import { Queue } from 'discord-player';
 import { CLIENT_ID, DISCORD_TOKEN, GUILD_ID, NodeEnv, NODE_ENV } from './constants';
 import { createDiscordBot, deployCommands, runCommand } from './discord-bot';
 import { logger } from './tools/logger';
