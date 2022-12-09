@@ -1,3 +1,4 @@
+import { Queue } from 'discord-player';
 import { CLIENT_ID, DISCORD_TOKEN, GUILD_ID, NodeEnv, NODE_ENV } from './constants';
 import { createDiscordBot, deployCommands, runCommand } from './discord-bot';
 import { logger } from './tools/logger';
@@ -22,6 +23,10 @@ async function main() {
 	discordBot.client.on('ready', () => {
 		logger.info('Discord bot started successfully');
 	});
+
+	discordBot.player.on('trackStart', (queue: any, track) =>
+		queue.metadata.channel.send(`Now playing **${track.title}**!`),
+	);
 
 	discordBot.client.on('interactionCreate', async (interaction) => {
 		if (!interaction.isCommand()) {

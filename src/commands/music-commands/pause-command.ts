@@ -5,7 +5,7 @@ import * as musicManager from '../../managers/music-manager';
 export const prefix = 'pause';
 export const options = [];
 
-export const data = new SlashCommandBuilder().setName(prefix).setDescription('Pause a song');
+export const data = new SlashCommandBuilder().setName(prefix).setDescription('Pause music');
 
 export function execute(ctx: Context) {
 	return musicManager.pause({

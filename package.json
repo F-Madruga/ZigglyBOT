@@ -24,11 +24,13 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@discordjs/opus": "0.8.0",
     "@types/pino": "7.0.5",
     "@types/pino-pretty": "5.0.0",
     "discord-player": "^5.3.2",
     "discord.js": "^14.7.1",
     "dotenv-safe": "^8.2.0",
+    "ffmpeg-static": "5.1.0",
     "pino": "8.7.0",
     "pino-pretty": "9.1.1"
   },

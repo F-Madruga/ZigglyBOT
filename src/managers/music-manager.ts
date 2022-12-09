@@ -22,7 +22,7 @@ export async function play({ ctx, query }: PlayArgs) {
 
 	const queue = player.createQueue(guild, {
 		metadata: {
-			voiceChannel,
+			channel: interaction.channel,
 		},
 	});
 
@@ -44,12 +44,12 @@ export async function play({ ctx, query }: PlayArgs) {
 		.then((x) => x.tracks[0]);
 
 	if (!track) {
-		return interaction.reply({ content: `Track **${query}** not found!` });
+		return interaction.followUp({ content: `Track **${query}** not found!` });
 	}
 
 	queue.play(track);
 
-	return interaction.reply({ content: `Loading track **${track.title}**!` });
+	return interaction.followUp({ content: `Loading track **${track.title}**!` });
 }
 
 interface PauseArgs {
