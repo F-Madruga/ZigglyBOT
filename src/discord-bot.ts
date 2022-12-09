@@ -15,23 +15,17 @@ interface DiscordConfig {
 	guildId: string;
 }
 
-export interface CommandArgs {
+export interface Context {
+	interaction: CommandInteraction;
 	discordBot: DiscordBot;
 }
 
 export interface Command {
 	prefix: string;
-	data: SlashCommandBuilder;
-	getArgs: (interaction: CommandInteraction, args: CommandArgs) => CommandArgs;
-	validateCommandArgs: (args: CommandArgs) => CommandArgs;
-	execute: (interaction: CommandInteraction, args: CommandArgs) => any;
-	reply: (interaction: CommandInteraction, args: CommandArgs, result?: any) => any;
-	errorHandler: (
-		error: any,
-		interaction: CommandInteraction,
-		args?: CommandArgs,
-		result?: any,
-	) => any;
+	options: string[];
+	data: Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
+	validateCommandArgs?: (args: any) => any;
+	execute: (ctx: Context) => any;
 }
 
 export interface DiscordBot {
@@ -87,34 +81,10 @@ export async function deployCommands(discordBot: DiscordBot): Promise<void> {
 export async function runCommand(discordBot: DiscordBot, interaction: CommandInteraction) {
 	const { commandName } = interaction;
 	const command = discordBot.commands.get(commandName);
+	const ctx = { interaction, discordBot };
 
 	if (!command) {
 		return;
 	}
-
-	let commandArgs;
-	try {
-		commandArgs = command.getArgs(interaction, { discordBot });
-	} catch (error) {
-		return command.errorHandler(error, interaction, commandArgs);
-	}
-
-	try {
-		commandArgs = command.validateCommandArgs(commandArgs);
-	} catch (error) {
-		return command.errorHandler(error, interaction, commandArgs);
-	}
-
-	let result;
-	try {
-		result = await command.execute(interaction, commandArgs);
-	} catch (error) {
-		return command.errorHandler(error, interaction, commandArgs, result);
-	}
-
-	try {
-		return command.reply(interaction, commandArgs, result);
-	} catch (error) {
-		return command.errorHandler(error, interaction, commandArgs, result);
-	}
+	return command.execute(ctx);
 }
