@@ -1,5 +1,6 @@
-import { CLIENT_ID, DISCORD_TOKEN, GUILD_ID } from './constants';
+import { CLIENT_ID, DISCORD_TOKEN, GUILD_ID, NodeEnv, NODE_ENV } from './constants';
 import { createDiscordBot, deployCommands, runCommand } from './discord-bot';
+import { logger } from './tools/logger';
 
 async function main() {
 	const discordBot = createDiscordBot({
@@ -8,14 +9,18 @@ async function main() {
 		guildId: GUILD_ID,
 	});
 
-	await deployCommands(discordBot)
-		.then(() => {
-			console.log('Discord bot commands deployed successfully');
-		})
-		.catch(console.error);
+	if (NODE_ENV === NodeEnv.prod) {
+		await deployCommands(discordBot.config, discordBot.commands)
+			.then(() => {
+				logger.info('Discord bot commands deployed successfully');
+			})
+			.catch((error) => {
+				logger.error(error);
+			});
+	}
 
 	discordBot.client.on('ready', () => {
-		console.log('Discord bot started successfully');
+		logger.info('Discord bot started successfully');
 	});
 
 	discordBot.client.on('interactionCreate', async (interaction) => {
@@ -30,5 +35,5 @@ async function main() {
 }
 
 main().catch((error) => {
-	console.error(error);
+	logger.error(error);
 });

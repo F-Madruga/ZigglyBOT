@@ -12,9 +12,9 @@ interface PlayArgs {
 
 export const data = new SlashCommandBuilder()
 	.setName(prefix)
-	.setDescription('Play a song in your voice chat')
+	.setDescription('Play music in your voice chat')
 	.addStringOption((option) =>
-		option.setName(options[0]).setDescription('Link or name of your song').setRequired(true),
+		option.setName(options[0]).setDescription('Link or name of your music').setRequired(true),
 	);
 
 export function validateCommandArgs(args: PlayArgs): PlayArgs {

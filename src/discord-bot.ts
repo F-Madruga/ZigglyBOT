@@ -1,4 +1,5 @@
 import { Player } from 'discord-player';
+import 'discord-player/smoothVolume';
 import {
 	Client,
 	CommandInteraction,
@@ -68,14 +69,17 @@ export function createDiscordBot({ token, clientId, guildId }: DiscordConfig): D
 	return discordBot;
 }
 
-export async function deployCommands(discordBot: DiscordBot): Promise<void> {
-	const rest = new REST({ version: '10' }).setToken(discordBot.config.token);
+export async function deployCommands(
+	discordConfig: DiscordConfig,
+	commands: Map<string, Command>,
+): Promise<void> {
+	const rest = new REST({ version: '10' }).setToken(discordConfig.token);
 
-	const commands = Array.from(discordBot.commands.values()).map((command: Command) =>
+	const commandsList = Array.from(commands.values()).map((command: Command) =>
 		command.data.toJSON(),
 	);
 
-	await rest.put(Routes.applicationCommands(discordBot.config.clientId), { body: commands });
+	await rest.put(Routes.applicationCommands(discordConfig.clientId), { body: commandsList });
 }
 
 export async function runCommand(discordBot: DiscordBot, interaction: CommandInteraction) {

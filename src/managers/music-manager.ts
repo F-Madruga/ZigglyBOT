@@ -72,5 +72,5 @@ export async function pause({ ctx }: PauseArgs) {
 		return interaction.reply({ content: 'Something went wrong!' });
 	}
 
-	return interaction.reply({ content: 'Song stopped' });
+	return interaction.reply({ content: 'Music stopped' });
 }
