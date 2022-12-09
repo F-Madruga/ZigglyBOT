@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  zigglybot:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    image: zigglybot
+    container_name: zigglybot
+    networks:
+      - zigglybot_network
+    stdin_open: true
+    tty: true
+    env_file:
+      - ../.env
+
+networks:
+  zigglybot_network:
