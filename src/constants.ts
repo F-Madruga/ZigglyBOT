@@ -11,3 +11,5 @@ export enum NodeEnv {
 	dev = 'dev',
 	test = 'test',
 }
+
+export const POPCORD_ENDPOINT = 'https://api-popcord.vercel.app';
