@@ -1,7 +1,7 @@
 import { Command } from '../discord-bot';
 import * as healthcheckCommand from './healthcheck-command';
 import * as musicCommands from './music-commands';
-import * as memes from './memes';
+import * as memeCommands from './meme-commands';
 import * as listCommands from './list-commands-command';
 
 export function getCommands(): Map<string, Command> {
@@ -18,8 +18,8 @@ export function getCommands(): Map<string, Command> {
 	commands.set(musicCommands.stop.prefix, musicCommands.stop);
 	commands.set(musicCommands.back.prefix, musicCommands.back);
 	commands.set(musicCommands.shuffle.prefix, musicCommands.shuffle);
-	commands.set(memes.getMeme.prefix, memes.getMeme);
-	commands.set(memes.getAnimeMeme.prefix, memes.getAnimeMeme);
+	commands.set(memeCommands.meme.prefix, memeCommands.meme);
+	commands.set(memeCommands.animeMeme.prefix, memeCommands.animeMeme);
 
 	return commands;
 }
