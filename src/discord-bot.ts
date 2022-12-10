@@ -9,6 +9,7 @@ import {
 	SlashCommandBuilder,
 } from 'discord.js';
 import { getCommands } from './commands';
+import { logger } from './tools/logger';
 
 interface DiscordConfig {
 	token: string;
@@ -88,7 +89,12 @@ export async function runCommand(discordBot: DiscordBot, interaction: CommandInt
 	const ctx = { interaction, discordBot };
 
 	if (!command) {
-		return;
+		logger.info(`Command ${commandName} does not exist`);
+
+		return interaction.reply({ content: `Command ${commandName} does not exist` });
 	}
+
+	logger.info(`Receive command: ${command.prefix}`);
+
 	return command.execute(ctx);
 }
