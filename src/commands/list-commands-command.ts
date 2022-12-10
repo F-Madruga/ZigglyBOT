@@ -13,7 +13,8 @@ export function execute(ctx: Context) {
 	let response = '';
 
 	Array.from(commands.values()).forEach(
-		(command: Command) => (response += `**${command.prefix}** - ${command.data.description}\n`),
+		(command: Command, index: number) =>
+			(response += `${index + 1} - **${command.prefix}**: ${command.data.description}\n`),
 	);
 
 	return ctx.interaction.reply({ content: response });

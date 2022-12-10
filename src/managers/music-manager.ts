@@ -47,9 +47,9 @@ export async function play({ ctx, query }: PlayArgs) {
 		return interaction.followUp({ content: `Track **${query}** not found` });
 	}
 
-	queue.play(track);
+	await interaction.followUp({ content: `Loading track **${track.title}**` });
 
-	return interaction.followUp({ content: `Loading track **${track.title}**` });
+	return queue.play(track);
 }
 
 interface PauseArgs {
