@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { Context } from '../../discord-bot';
-import * as memeManager from '../../managers/meme-manager';
+import * as memeManager from '../../managers/popcord-manager';
 
 export const prefix = 'animememe';
 export const options = [];
