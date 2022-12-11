@@ -1,6 +1,6 @@
-import * as popcordRepository from './popcord-repository';
+import * as popcordRepository from '../../../src/repositories/popcord-repository';
 import nock from 'nock';
-import { POPCORD_ENDPOINT } from '../constants';
+import { POPCORD_ENDPOINT } from '../../../src/constants';
 
 describe('popcord repository', () => {
 	it('should return a single meme', async () => {

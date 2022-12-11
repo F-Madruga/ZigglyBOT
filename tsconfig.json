@@ -12,5 +12,9 @@
 		"useUnknownInCatchVariables": false,
 		"resolveJsonModule": true
 	},
-	"include": ["./src"]
+	"include": [
+		"./src",
+		"tests/unit/managers/popcord-manager.test.ts",
+		"tests/unit/repositories/popcord-repository.test.ts"
+	]
 }
