@@ -1,4 +1,4 @@
-import { Context } from '../../../../src/discord-bot';
+import { Context } from '../../../src/discord-bot';
 import { MockDiscordBot } from './discord-bot';
 import { MockInteraction } from './interaction';
 

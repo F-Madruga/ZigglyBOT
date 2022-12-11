@@ -1,8 +1,7 @@
 import * as memeCommands from '../../../../src/commands/meme-commands';
-import { Context } from '../../../../src/discord-bot';
 import * as popcordManager from '../../../../src/managers/popcord-manager';
 import sinon from 'ts-sinon';
-import { MockDiscordContext } from '../../mocks/discord';
+import { MockDiscordContext } from '../../../mocks/discord';
 
 describe('meme command', () => {
 	const memeCommand = memeCommands.meme;

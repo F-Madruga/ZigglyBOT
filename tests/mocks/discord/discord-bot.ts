@@ -1,6 +1,6 @@
 import { MockClient } from './client';
 import { MockPlayer } from './player';
-import { DiscordConfig, DiscordBot, Command } from '../../../../src/discord-bot';
+import { DiscordConfig, DiscordBot, Command } from '../../../src/discord-bot';
 
 export class MockDiscordBot {
 	public mockedResults: any;

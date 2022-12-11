@@ -1,7 +1,7 @@
 import * as popcordManager from '../../../src/managers/popcord-manager';
 import * as popcordRepository from '../../../src/repositories/popcord-repository';
 import sinon from 'ts-sinon';
-import { MockDiscordContext } from '../mocks/discord';
+import { MockDiscordContext } from '../../mocks/discord';
 
 describe('popcord manager', () => {
 	afterEach(() => {
