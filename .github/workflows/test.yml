@@ -6,7 +6,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      NODE_ENV: dev
+      NODE_ENV: test
       LOGGER_LEVEL: debug
       DISCORD_TOKEN: DISCORD_TOKEN
       CLIENT_ID: CLIENT_ID
