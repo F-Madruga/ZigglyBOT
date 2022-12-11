@@ -1,8 +1,8 @@
 import fetch from 'node-fetch';
 import { POPCORD_ENDPOINT } from '../constants';
 
-const SFW_ENDPOINT = '/img/sfw/meme';
-const SFW_ANIME_ENDPOINT = '/img/sfw/anime_meme';
+export const SFW_ENDPOINT = '/img/sfw/meme';
+export const SFW_ANIME_ENDPOINT = '/img/sfw/anime_meme';
 
 export async function findOneSFWMeme(): Promise<PopcordResponse> {
 	const response = await fetch(POPCORD_ENDPOINT + SFW_ENDPOINT, {

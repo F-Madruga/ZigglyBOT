@@ -11,7 +11,7 @@ import {
 import { getCommands } from './commands';
 import { logger } from './tools/logger';
 
-interface DiscordConfig {
+export interface DiscordConfig {
 	token: string;
 	clientId: string;
 	guildId: string;
