@@ -14,7 +14,7 @@ describe('popcord manager', () => {
 				.stub(popcordRepository, 'findOneSFWMeme')
 				.resolves({ success: true, name: 'meme', url: 'meme.png' });
 
-			const mockCtx = new MockDiscordContext();
+			const mockCtx = new MockDiscordContext({});
 
 			const ctx = mockCtx.getMocked();
 
@@ -28,7 +28,7 @@ describe('popcord manager', () => {
 				.stub(popcordRepository, 'findOneSFWMeme')
 				.resolves({ success: false, name: '', url: '' });
 
-			const mockCtx = new MockDiscordContext();
+			const mockCtx = new MockDiscordContext({});
 
 			const ctx = mockCtx.getMocked();
 
@@ -46,7 +46,7 @@ describe('popcord manager', () => {
 				.stub(popcordRepository, 'findOneSFWAnimeMeme')
 				.resolves({ success: true, name: 'meme', url: 'anime-meme.png' });
 
-			const mockCtx = new MockDiscordContext();
+			const mockCtx = new MockDiscordContext({});
 
 			const ctx = mockCtx.getMocked();
 
@@ -60,7 +60,7 @@ describe('popcord manager', () => {
 				.stub(popcordRepository, 'findOneSFWAnimeMeme')
 				.resolves({ success: false, name: '', url: '' });
 
-			const mockCtx = new MockDiscordContext();
+			const mockCtx = new MockDiscordContext({});
 
 			const ctx = mockCtx.getMocked();
 

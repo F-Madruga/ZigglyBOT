@@ -2,6 +2,13 @@ import { MockClient } from './client';
 import { MockPlayer } from './player';
 import { DiscordConfig, DiscordBot, Command } from '../../../src/discord-bot';
 
+interface MockDiscordBotContructorArgs {
+	client: MockClient;
+	player: MockPlayer;
+	commands: Map<string, Command>;
+	config: DiscordConfig;
+}
+
 export class MockDiscordBot {
 	public mockedResults: any;
 
@@ -10,15 +17,20 @@ export class MockDiscordBot {
 	public commands: Map<string, Command>;
 	public config: DiscordConfig;
 
-	constructor() {
-		this.client = new MockClient();
-		this.player = new MockPlayer();
-		this.commands = new Map();
-		this.config = {
+	constructor({
+		client = new MockClient({}),
+		player = new MockPlayer({}),
+		commands = new Map(),
+		config = {
 			token: 'token',
 			guildId: 'guildId',
 			clientId: 'clientId',
-		};
+		},
+	}: Partial<MockDiscordBotContructorArgs>) {
+		this.client = client;
+		this.player = player;
+		this.commands = commands;
+		this.config = config;
 	}
 
 	public getMocked(): DiscordBot {
