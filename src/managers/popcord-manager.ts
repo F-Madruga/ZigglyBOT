@@ -1,14 +1,14 @@
 import { Context } from '../discord-bot';
-import * as memeRepository from '../repositories/meme-repository';
+import * as popcordRepository from '../repositories/popcord-repository';
 
-interface GetSFWMemeArgs {
+export interface GetSFWMemeArgs {
 	ctx: Context;
 }
 
 export async function getSFWMeme({ ctx }: GetSFWMemeArgs) {
 	const { interaction } = ctx;
 
-	const meme = await memeRepository.findOneSFWMeme();
+	const meme = await popcordRepository.findOneSFWMeme();
 
 	if (!meme.success) {
 		return interaction.reply({ content: 'Something went wrong' });
@@ -24,7 +24,7 @@ interface GetSFWAnimeMemeArgs {
 export async function getSFWAnimeMeme({ ctx }: GetSFWAnimeMemeArgs) {
 	const { interaction } = ctx;
 
-	const meme = await memeRepository.findOneSFWAnimeMeme();
+	const meme = await popcordRepository.findOneSFWAnimeMeme();
 
 	if (!meme.success) {
 		return interaction.reply({ content: 'Something went wrong' });

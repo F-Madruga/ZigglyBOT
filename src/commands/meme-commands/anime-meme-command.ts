@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { Context } from '../../discord-bot';
-import * as memeManager from '../../managers/meme-manager';
+import * as popcordManager from '../../managers/popcord-manager';
 
 export const prefix = 'animememe';
 export const options = [];
@@ -10,5 +10,5 @@ export const data = new SlashCommandBuilder()
 	.setDescription('Gets a random anime meme');
 
 export async function execute(ctx: Context) {
-	return memeManager.getSFWAnimeMeme({ ctx });
+	return popcordManager.getSFWAnimeMeme({ ctx });
 }
