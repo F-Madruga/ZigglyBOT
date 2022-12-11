@@ -3,25 +3,31 @@ import nock from 'nock';
 import { POPCORD_ENDPOINT } from '../../../src/constants';
 
 describe('popcord repository', () => {
-	it('should return a single meme', async () => {
-		const expectedResponse = { success: true, name: 'meme', url: 'test.png' };
-		nock(POPCORD_ENDPOINT + '/img/sfw/meme')
-			.get('')
-			.reply(200, expectedResponse);
+	describe('findOneSFWMeme', () => {
+		it('should return a single meme', async () => {
+			const expectedResponse = { success: true, name: 'meme', url: 'test.png' };
 
-		const response = await popcordRepository.findOneSFWMeme();
+			nock(POPCORD_ENDPOINT + popcordRepository.SFW_ENDPOINT)
+				.get('')
+				.reply(200, expectedResponse);
 
-		expect(response).toStrictEqual(expectedResponse);
+			const response = await popcordRepository.findOneSFWMeme();
+
+			expect(response).toStrictEqual(expectedResponse);
+		});
 	});
 
-	it('should return a single anime meme', async () => {
-		const expectedResponse = { success: true, name: 'meme', url: 'test.png' };
-		nock(POPCORD_ENDPOINT + '/img/sfw/anime_meme')
-			.get('')
-			.reply(200, expectedResponse);
+	describe('findOneSFWAnimeMeme', () => {
+		it('should return a single anime meme', async () => {
+			const expectedResponse = { success: true, name: 'meme', url: 'test.png' };
 
-		const response = await popcordRepository.findOneSFWAnimeMeme();
+			nock(POPCORD_ENDPOINT + popcordRepository.SFW_ANIME_ENDPOINT)
+				.get('')
+				.reply(200, expectedResponse);
 
-		expect(response).toStrictEqual(expectedResponse);
+			const response = await popcordRepository.findOneSFWAnimeMeme();
+
+			expect(response).toStrictEqual(expectedResponse);
+		});
 	});
 });

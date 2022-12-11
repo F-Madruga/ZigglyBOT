@@ -1,65 +1,74 @@
-import { GetSFWMemeArgs } from '../../../src/managers/popcord-manager';
 import * as popcordManager from '../../../src/managers/popcord-manager';
 import * as popcordRepository from '../../../src/repositories/popcord-repository';
 import sinon from 'ts-sinon';
+import { MockDiscordContext } from '../mocks/discord';
 
 describe('popcord manager', () => {
-	let realResponse: string;
-	const ctx: GetSFWMemeArgs = {
-		ctx: {
-			interaction: {
-				reply: (response: string) => {
-					realResponse = response;
-				},
-			},
-		},
-	} as unknown as GetSFWMemeArgs;
-
-	beforeEach(() => {
-		realResponse = '';
-	});
-
 	afterEach(() => {
 		sinon.restore();
 	});
 
-	it('should get a meme', async () => {
-		sinon
-			.stub(popcordRepository, 'findOneSFWMeme')
-			.resolves({ success: true, name: 'meme', url: 'meme.png' });
+	describe('findOneSFWMeme', () => {
+		it('should get a meme', async () => {
+			sinon
+				.stub(popcordRepository, 'findOneSFWMeme')
+				.resolves({ success: true, name: 'meme', url: 'meme.png' });
 
-		await popcordManager.getSFWMeme(ctx);
+			const mockCtx = new MockDiscordContext();
 
-		expect(realResponse).toStrictEqual({ content: 'meme.png' });
+			const ctx = mockCtx.getMocked();
+
+			await popcordManager.getSFWMeme({ ctx });
+
+			expect(mockCtx.interaction.mockedResults).toStrictEqual({ content: 'meme.png' });
+		});
+
+		it('should error when no meme is found', async () => {
+			sinon
+				.stub(popcordRepository, 'findOneSFWMeme')
+				.resolves({ success: false, name: '', url: '' });
+
+			const mockCtx = new MockDiscordContext();
+
+			const ctx = mockCtx.getMocked();
+
+			await popcordManager.getSFWMeme({ ctx });
+
+			expect(mockCtx.interaction.mockedResults).toStrictEqual({
+				content: 'Something went wrong',
+			});
+		});
 	});
 
-	it('should error when no meme is found', async () => {
-		sinon
-			.stub(popcordRepository, 'findOneSFWMeme')
-			.resolves({ success: false, name: '', url: '' });
+	describe('findOneSFWAnimeMeme', () => {
+		it('should get an anime meme', async () => {
+			sinon
+				.stub(popcordRepository, 'findOneSFWAnimeMeme')
+				.resolves({ success: true, name: 'meme', url: 'anime-meme.png' });
 
-		await popcordManager.getSFWMeme(ctx);
+			const mockCtx = new MockDiscordContext();
 
-		expect(realResponse).toStrictEqual({ content: 'Something went wrong' });
-	});
+			const ctx = mockCtx.getMocked();
 
-	it('should get an anime meme', async () => {
-		sinon
-			.stub(popcordRepository, 'findOneSFWAnimeMeme')
-			.resolves({ success: true, name: 'meme', url: 'anime-meme.png' });
+			await popcordManager.getSFWAnimeMeme({ ctx });
 
-		await popcordManager.getSFWAnimeMeme(ctx);
+			expect(mockCtx.interaction.mockedResults).toStrictEqual({ content: 'anime-meme.png' });
+		});
 
-		expect(realResponse).toStrictEqual({ content: 'anime-meme.png' });
-	});
+		it('should error when no anime meme is found', async () => {
+			sinon
+				.stub(popcordRepository, 'findOneSFWAnimeMeme')
+				.resolves({ success: false, name: '', url: '' });
 
-	it('should error when no anime meme is found', async () => {
-		sinon
-			.stub(popcordRepository, 'findOneSFWAnimeMeme')
-			.resolves({ success: false, name: '', url: '' });
+			const mockCtx = new MockDiscordContext();
 
-		await popcordManager.getSFWAnimeMeme(ctx);
+			const ctx = mockCtx.getMocked();
 
-		expect(realResponse).toStrictEqual({ content: 'Something went wrong' });
+			await popcordManager.getSFWAnimeMeme({ ctx });
+
+			expect(mockCtx.interaction.mockedResults).toStrictEqual({
+				content: 'Something went wrong',
+			});
+		});
 	});
 });

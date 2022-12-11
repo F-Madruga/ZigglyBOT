@@ -2,6 +2,7 @@ import * as memeCommands from '../../../../src/commands/meme-commands';
 import { Context } from '../../../../src/discord-bot';
 import * as popcordManager from '../../../../src/managers/popcord-manager';
 import sinon from 'ts-sinon';
+import { MockDiscordContext } from '../../mocks/discord';
 
 describe('meme command', () => {
 	const memeCommand = memeCommands.meme;
@@ -12,12 +13,13 @@ describe('meme command', () => {
 	});
 
 	it('should call manager with correct parameters', async () => {
-		const ctx = {
-			interface: {},
-		} as unknown as Context;
-		const popcordStub = sinon.stub(popcordManager, 'getSFWMeme');
+		const popcordManagerStub = sinon.stub(popcordManager, 'getSFWMeme');
+
+		const mockCtx = new MockDiscordContext();
+		const ctx = mockCtx.getMocked();
+
 		await memeCommand.execute(ctx);
 
-		expect(popcordStub.calledWith({ ctx })).toBeTruthy;
+		expect(popcordManagerStub.calledWith({ ctx })).toBeTruthy;
 	});
 });
