@@ -13,3 +13,5 @@ export enum NodeEnv {
 }
 
 export const POPCORD_ENDPOINT = 'https://api-popcord.vercel.app';
+
+export const PRIBERAM_WORD_OF_THE_DAY_ENDPOINT = 'https://dicionario.priberam.org/DoDiaRSS.aspx';

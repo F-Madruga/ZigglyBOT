@@ -1,6 +1,7 @@
 import { Command } from '../discord-bot';
 import * as healthcheckCommand from './healthcheck-command';
 import * as musicCommands from './music-commands';
+import * as priberamCommands from './priberam-commands';
 import * as memeCommands from './meme-commands';
 import * as listCommands from './list-commands-command';
 
@@ -20,6 +21,11 @@ export function getCommands(): Map<string, Command> {
 	commands.set(musicCommands.shuffle.prefix, musicCommands.shuffle);
 	commands.set(memeCommands.meme.prefix, memeCommands.meme);
 	commands.set(memeCommands.animeMeme.prefix, memeCommands.animeMeme);
+	commands.set(priberamCommands.wordOfTheDay.prefix, priberamCommands.wordOfTheDay);
+	commands.set(
+		priberamCommands.wordOfTheDayAsNickname.prefix,
+		priberamCommands.wordOfTheDayAsNickname,
+	);
 
 	return commands;
 }
