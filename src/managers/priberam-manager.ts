@@ -2,6 +2,7 @@ import { Context } from '../discord-bot';
 import * as cron from 'node-cron';
 import * as priberamRepository from '../repositories/priberam-repository';
 import { logger } from '../tools/logger';
+import { DiscordAPIError } from 'discord.js';
 
 export interface GetWordOfTheDayArgs {
 	ctx: Context;
@@ -41,7 +42,14 @@ export async function setWordOfTheDayAsNicknameArgs({ ctx }: SetWordOfTheDayAsNi
 	const newNickname =
 		wordOfTheDay.word.charAt(0).toUpperCase() + wordOfTheDay.word.slice(1).toLowerCase();
 
-	await member.setNickname(newNickname);
+	try {
+		await member.setNickname(newNickname);
+	} catch (error) {
+		if (error.code === 50013) {
+			logger.info('Missing permissions to change nickname');
+			return interaction.reply({ content: 'Missing permissions to change nickname' });
+		}
+	}
 
 	cron.schedule('1 0 * * *', async () => {
 		const wordOfTheDay = await priberamRepository.findWordOfTheDay();
