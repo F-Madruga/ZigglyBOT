@@ -15,7 +15,7 @@ describe('healthcheck command', () => {
 		await healthcheckCommand.execute(ctx);
 
 		expect(mockCtx.interaction.mockedResults).toStrictEqual({
-			content: 'ok',
+			content: 'oki',
 		});
 	});
 });
