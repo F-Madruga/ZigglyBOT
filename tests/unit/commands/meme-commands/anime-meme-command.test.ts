@@ -17,6 +17,6 @@ describe('animememe command', () => {
 
 		await animeMeme.execute(ctx);
 
-		expect(popcordManagerStub.calledWith({ ctx })).toBeTruthy;
+		expect(popcordManagerStub.getCall(0).args[0]).toStrictEqual({ ctx });
 	});
 });
