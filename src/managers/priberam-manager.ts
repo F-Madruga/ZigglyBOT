@@ -1,14 +1,14 @@
 import { Context } from '../discord-bot';
-import * as cron from 'node-cron';
+import * as userManager from './user-manager';
+import * as userConfigurationsManager from './user-configurations-manager';
 import * as priberamRepository from '../repositories/priberam-repository';
 import { logger } from '../tools/logger';
-import { DiscordAPIError } from 'discord.js';
 
 export interface GetWordOfTheDayArgs {
 	ctx: Context;
 }
 
-export async function getWordOfTheDay({ ctx }: GetWordOfTheDayArgs) {
+export async function handleWordOfTheDayCommand({ ctx }: GetWordOfTheDayArgs) {
 	const { interaction } = ctx;
 
 	const wordOfTheDay = await priberamRepository.findWordOfTheDay();
@@ -33,6 +33,33 @@ export async function setWordOfTheDayAsNicknameArgs({ ctx }: SetWordOfTheDayAsNi
 	const guild = await client.guilds.fetch(guildId);
 	const member = await guild.members.fetch(user.id);
 
+	userManager.upsert({
+		uuid: 'test',
+		discordId: user.id,
+		username: user.username,
+		discriminator: user.discriminator,
+		createdAt: new Date(),
+		updatedAt: new Date(),
+	});
+
+	const dbUser = userManager.findDiscordId(user.id);
+
+	if (!dbUser) {
+		return;
+	}
+
+	userConfigurationsManager.upsert({
+		userUuid: dbUser?.uuid,
+		priberamWordOfTheDayNickname: true,
+		createdAt: new Date(),
+		updatedAt: new Date(),
+	});
+
+	const userList = userManager.findMany();
+	const userConfigs = userConfigurationsManager.findMany();
+	console.log(userList);
+	console.log(userConfigs);
+
 	const wordOfTheDay = await priberamRepository.findWordOfTheDay();
 
 	if (!wordOfTheDay) {
@@ -51,19 +78,9 @@ export async function setWordOfTheDayAsNicknameArgs({ ctx }: SetWordOfTheDayAsNi
 		}
 	}
 
-	cron.schedule('1 0 * * *', async () => {
-		const wordOfTheDay = await priberamRepository.findWordOfTheDay();
-
-		if (!wordOfTheDay) {
-			throw new Error();
-		}
-
-		const newNickname =
-			wordOfTheDay.word.charAt(0).toUpperCase() + wordOfTheDay.word.slice(1).toLowerCase();
-
-		await member.setNickname(newNickname);
-		logger.info(`Change nickname of ${member.user.username} to ${newNickname}`);
-	});
-
 	return interaction.reply({ content: `Nickname updated to ${newNickname}` });
+}
+
+export function getWordOfTheDay() {
+	return priberamRepository.findWordOfTheDay();
 }

@@ -10,5 +10,5 @@ export const data = new SlashCommandBuilder()
 	.setDescription('Get priberam word of the day');
 
 export function execute(ctx: Context) {
-	return priberamManager.getWordOfTheDay({ ctx });
+	return priberamManager.handleWordOfTheDayCommand({ ctx });
 }

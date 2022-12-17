@@ -1,8 +1,18 @@
-import { CLIENT_ID, DISCORD_TOKEN, GUILD_ID, NodeEnv, NODE_ENV } from './constants';
+import { CLIENT_ID, DISCORD_TOKEN, GUILD_ID, NodeEnv, NODE_ENV, SERVER_PORT } from './constants';
 import { createDiscordBot, deployCommands, runCommand } from './discord-bot';
 import { logger } from './tools/logger';
+import app from './app';
 
 async function main() {
+	app.listen({ port: SERVER_PORT }, (error, address) => {
+		if (error) {
+			logger.error(error);
+			process.exit(1);
+		}
+
+		logger.info(`Server listening at ${address}`);
+	});
+
 	const discordBot = createDiscordBot({
 		token: DISCORD_TOKEN,
 		clientId: CLIENT_ID,
@@ -21,6 +31,30 @@ async function main() {
 
 	discordBot.client.on('ready', () => {
 		logger.info('Discord bot started successfully');
+	});
+
+	discordBot.client.on('guildMemberAdd', (member) => {
+		const user = {
+			uuid: 'test',
+			discordId: member.id,
+			username: member.user.username,
+			discriminator: member.user.discriminator,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		};
+		logger.info(`New user joined the server: ${user}`);
+	});
+
+	discordBot.client.on('guildMemberRemove', (member) => {
+		const user = {
+			uuid: 'test',
+			discordId: member.id,
+			username: member.user.username,
+			discriminator: member.user.discriminator,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		};
+		logger.info(`User left server ${user}`);
 	});
 
 	discordBot.player.on('trackStart', (queue: any, track) =>

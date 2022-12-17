@@ -13,9 +13,7 @@ describe('listcommands command', () => {
 		commands.set(listCommand.prefix, listCommand);
 
 		const mockDiscordBot = new MockDiscordBot({ commands });
-
 		const mockCtx = new MockDiscordContext({ discordBot: mockDiscordBot });
-
 		const ctx = mockCtx.getMocked();
 
 		await listCommand.execute(ctx);
