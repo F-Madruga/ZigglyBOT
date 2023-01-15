@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  zigglybot_dev:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile.dev
+    image: zigglybot_dev
+    container_name: zigglybot_dev
+    networks:
+      - zigglybot_dev_network
+    stdin_open: true
+    tty: true
+    env_file:
+      - ../.env
+    volumes:
+      - ../dist:/usr/dist
+      - ../node_modules:/usr/node_modules
+
+networks:
+  zigglybot_dev_network:

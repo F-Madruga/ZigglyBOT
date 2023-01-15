@@ -16,6 +16,8 @@
     "start": "node dist/index.js",
     "docker:compose:up": "docker-compose -f docker/docker-compose.yml up --build",
     "docker:compose:down": "docker-compose -f docker/docker-compose.yml down --rmi all",
+    "dev:docker:up": "docker-compose -f docker/docker-compose.dev.yml up --build",
+    "dev:docker:down": "docker-compose -f docker/docker-compose.dev.yml down --rmi all",
     "deploy:commands": "tsc && node dist/tools/deploy-commands.js",
     "test": "jest",
     "test:watch": "jest --watch",
