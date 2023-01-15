@@ -3,13 +3,15 @@ import * as popcordManager from '../../../../src/managers/popcord-manager';
 import sinon from 'ts-sinon';
 import { MockDiscordContext } from '../../../mocks/discord';
 
-describe('meme command', () => {
-	it('should return the correct command prefix', () => {
+describe('meme command - meme command', () => {
+	it('date - should return the correct command prefix', () => {
 		expect(memeCommand.prefix).toEqual('meme');
 		expect(memeCommand.data.description).toEqual('Gets a random meme');
+		expect(memeCommand.options).toEqual([]);
+		expect(memeCommand.data.options.length).toEqual(0);
 	});
 
-	it('should call manager with correct parameters', async () => {
+	it('execute - should call manager with correct parameters', async () => {
 		const popcordManagerStub = sinon.stub(popcordManager, 'getSFWMeme');
 
 		const mockCtx = new MockDiscordContext({});
