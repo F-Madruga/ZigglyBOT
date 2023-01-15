@@ -11,12 +11,35 @@ services:
       - zigglybot_network
     stdin_open: true
     tty: true
+    depends_on:
+      database:
+        condition: service_healthy
     env_file:
       - ../.env
+    environment:
+      - SERVER_PORT=4000
+      - DATABASE_URL=postgresql://postgres:postgres@zigglybot_db:5432/zigglybot
     ports:
-      - ${SERVER_PORT}:${SERVER_PORT}
+      - 4000:4000
+      - 5432:5432
     volumes:
       - ../dist:/usr/dist
+      - ../node_modules:/usr/node_modules
+
+  database:
+    image: postgres:15-alpine
+    container_name: zigglybot_db
+    environment:
+      - POSTGRES_DB=zigglybot
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - zigglybot_network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
   zigglybot_network:

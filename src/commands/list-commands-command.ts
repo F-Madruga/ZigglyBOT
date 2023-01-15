@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { Command, Context } from '../discord-bot';
+import { Context } from '../discord-bot';
 
 export const prefix = 'listcommands';
 export const options = [];
@@ -13,7 +13,7 @@ export function execute(ctx: Context) {
 	let response = '';
 
 	Array.from(commands.values()).forEach(
-		(command: Command, index: number) =>
+		(command, index) =>
 			(response += `${index + 1} - **${command.prefix}**: ${command.data.description}\n`),
 	);
 

@@ -1,0 +1,14 @@
+{
+	"sqltools.connections": [
+		{
+			"previewLimit": 50,
+			"server": "zigglybot_db",
+			"port": 5432,
+			"driver": "PostgreSQL",
+			"name": "zigglybot",
+			"database": "zigglybot",
+			"username": "postgres",
+			"password": "postgres"
+		}
+	]
+}

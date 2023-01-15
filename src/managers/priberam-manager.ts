@@ -33,32 +33,18 @@ export async function setWordOfTheDayAsNicknameArgs({ ctx }: SetWordOfTheDayAsNi
 	const guild = await client.guilds.fetch(guildId);
 	const member = await guild.members.fetch(user.id);
 
-	userManager.upsert({
-		uuid: 'test',
-		discordId: user.id,
-		username: user.username,
-		discriminator: user.discriminator,
-		createdAt: new Date(),
-		updatedAt: new Date(),
-	});
-
-	const dbUser = userManager.findDiscordId(user.id);
+	const dbUser = await userManager.findOne({ discordId: user.id });
 
 	if (!dbUser) {
 		return;
 	}
 
-	userConfigurationsManager.upsert({
+	await userConfigurationsManager.upsert({
 		userUuid: dbUser?.uuid,
 		priberamWordOfTheDayNickname: true,
 		createdAt: new Date(),
 		updatedAt: new Date(),
 	});
-
-	const userList = userManager.findMany();
-	const userConfigs = userConfigurationsManager.findMany();
-	console.log(userList);
-	console.log(userConfigs);
 
 	const wordOfTheDay = await priberamRepository.findWordOfTheDay();
 

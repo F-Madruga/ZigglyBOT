@@ -11,7 +11,7 @@ export async function updateWordOfTheDay() {
 
 	const usersConfigurations = await userConfigurationsManager.findActivePriberamNickName();
 	const users = await usersConfigurations.map(async (userConfigurations) =>
-		userManager.findByUuid(userConfigurations.userUuid),
+		userManager.findOne({ uuid: userConfigurations.userUuid }),
 	);
 
 	return users;

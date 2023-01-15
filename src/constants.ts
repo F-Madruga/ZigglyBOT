@@ -1,7 +1,14 @@
 import 'dotenv-safe/config';
 
-export const { NODE_ENV, LOGGER_LEVEL, DISCORD_TOKEN, CLIENT_ID, GUILD_ID, SERVER_PORT } =
-	process.env;
+export const {
+	NODE_ENV,
+	LOGGER_LEVEL,
+	DISCORD_TOKEN,
+	CLIENT_ID,
+	GUILD_ID,
+	SERVER_PORT,
+	DATABASE_URL,
+} = process.env;
 
 if (!NODE_ENV || !LOGGER_LEVEL || !DISCORD_TOKEN || !CLIENT_ID || !GUILD_ID || !SERVER_PORT) {
 	throw new Error('Missing environment variables');
