@@ -1,11 +1,19 @@
 import { CommandInteraction } from 'discord.js';
+import { MockInteractionOptions } from './interaction-options';
 
-interface MockInteractionContructorArgs {}
+interface MockInteractionContructorArgs {
+	options: MockInteractionOptions;
+}
 
 export class MockInteraction {
 	public mockedResults: any;
+	public options: MockInteractionOptions;
 
-	constructor({}: Partial<MockInteractionContructorArgs>) {}
+	constructor({
+		options = new MockInteractionOptions({}),
+	}: Partial<MockInteractionContructorArgs>) {
+		this.options = options;
+	}
 
 	public reply(reply: any) {
 		this.mockedResults = reply;
