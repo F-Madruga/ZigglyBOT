@@ -4,6 +4,10 @@ import sinon from 'ts-sinon';
 import { MockDiscordContext } from '../../../mocks/discord';
 
 describe('music command - skip command', () => {
+	afterEach(() => {
+		sinon.restore();
+	});
+
 	it('data - should return the correct command prefix', () => {
 		expect(skipCommand.prefix).toEqual('skip');
 		expect(skipCommand.data.description).toEqual('Skip the current music');

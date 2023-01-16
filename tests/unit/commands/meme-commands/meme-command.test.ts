@@ -4,6 +4,10 @@ import sinon from 'ts-sinon';
 import { MockDiscordContext } from '../../../mocks/discord';
 
 describe('meme command - meme command', () => {
+	afterEach(() => {
+		sinon.restore();
+	});
+
 	it('date - should return the correct command prefix', () => {
 		expect(memeCommand.prefix).toEqual('meme');
 		expect(memeCommand.data.description).toEqual('Gets a random meme');

@@ -4,6 +4,10 @@ import sinon from 'ts-sinon';
 import { MockDiscordContext } from '../../../mocks/discord';
 
 describe('music command - back command', () => {
+	afterEach(() => {
+		sinon.restore();
+	});
+
 	it('data - should return the correct command prefix', () => {
 		expect(backCommand.prefix).toEqual('back');
 		expect(backCommand.data.description).toEqual('Play the previous music');

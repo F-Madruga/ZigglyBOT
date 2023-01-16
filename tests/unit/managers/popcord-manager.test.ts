@@ -23,7 +23,7 @@ describe('popcord manager', () => {
 			expect(mockCtx.interaction.mockedResults).toStrictEqual({ content: 'meme.png' });
 		});
 
-		it('should error when no meme is found', async () => {
+		it('should throw an error when no meme is found', async () => {
 			sinon
 				.stub(popcordRepository, 'findOneSFWMeme')
 				.resolves({ success: false, name: '', url: '' });
@@ -55,7 +55,7 @@ describe('popcord manager', () => {
 			expect(mockCtx.interaction.mockedResults).toStrictEqual({ content: 'anime-meme.png' });
 		});
 
-		it('should error when no anime meme is found', async () => {
+		it('should thrown an error when no anime meme is found', async () => {
 			sinon
 				.stub(popcordRepository, 'findOneSFWAnimeMeme')
 				.resolves({ success: false, name: '', url: '' });
