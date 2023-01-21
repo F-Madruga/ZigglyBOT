@@ -1,4 +1,4 @@
-import { CommandInteraction, SlashCommandBuilder, User } from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
 import { Context } from '../../discord-bot';
 import { parseInteractionOptions } from '../../tools/parse-interaction-options';
 import * as musicManager from '../../managers/music-manager';
@@ -12,7 +12,7 @@ interface PlayArgs {
 
 export const data = new SlashCommandBuilder()
 	.setName(prefix)
-	.setDescription('Play music in your voice chat')
+	.setDescription('Set music to play next in your voice chat')
 	.addStringOption((option) =>
 		option.setName(options[0]).setDescription('Link or name of your music').setRequired(true),
 	);

@@ -1,4 +1,4 @@
-import { CommandInteraction, SlashCommandBuilder, User } from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
 import { Context } from '../../discord-bot';
 import { parseInteractionOptions } from '../../tools/parse-interaction-options';
 import * as musicManager from '../../managers/music-manager';

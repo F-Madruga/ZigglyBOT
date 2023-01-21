@@ -1,19 +1,25 @@
 import * as memeCommand from '../../../../src/commands/meme-commands/meme-command';
 import * as popcordManager from '../../../../src/managers/popcord-manager';
 import sinon from 'ts-sinon';
-import { MockDiscordContext } from '../../../mocks/discord';
+import { MockContext } from '../../../mocks/discord';
 
-describe('meme command', () => {
-	it('should return the correct command prefix', () => {
-		expect(memeCommand.prefix).toEqual('meme');
-		expect(memeCommand.data.description).toEqual('Gets a random meme');
+describe('meme command - meme command', () => {
+	afterEach(() => {
+		sinon.restore();
 	});
 
-	it('should call manager with correct parameters', async () => {
+	it('date - should return the correct command prefix', () => {
+		expect(memeCommand.prefix).toEqual('meme');
+		expect(memeCommand.data.description).toEqual('Gets a random meme');
+		expect(memeCommand.options).toEqual([]);
+		expect(memeCommand.data.options.length).toEqual(0);
+	});
+
+	it('execute - should call manager with correct parameters', async () => {
 		const popcordManagerStub = sinon.stub(popcordManager, 'getSFWMeme');
 
-		const mockCtx = new MockDiscordContext({});
-		const ctx = mockCtx.getMocked();
+		const mockCtx = new MockContext({});
+		const ctx = mockCtx.getMock();
 
 		await memeCommand.execute(ctx);
 

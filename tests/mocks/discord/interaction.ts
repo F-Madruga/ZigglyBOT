@@ -1,21 +1,42 @@
 import { CommandInteraction } from 'discord.js';
+import { MockInteractionOptions } from './interaction-options';
+import { MockTextChannel } from './text-channel';
+import { MockUser } from './user';
 
-interface MockInteractionContructorArgs {}
+interface MockInteractionContructorArgs {
+	reply: jest.Mock;
+	followUp: jest.Mock;
+	deferReply: jest.Mock;
+	channel: MockTextChannel;
+	user: MockUser;
+	options: MockInteractionOptions;
+}
 
 export class MockInteraction {
-	public mockedResults: any;
+	public reply: jest.Mock;
+	public followUp: jest.Mock;
+	public deferReply: jest.Mock;
+	public channel: MockTextChannel;
+	public user: MockUser;
+	public options: MockInteractionOptions;
 
-	constructor({}: Partial<MockInteractionContructorArgs>) {}
-
-	public reply(reply: any) {
-		this.mockedResults = reply;
+	constructor({
+		reply = jest.fn(),
+		followUp = jest.fn(),
+		deferReply = jest.fn(),
+		channel = new MockTextChannel({}),
+		user = new MockUser({}),
+		options = new MockInteractionOptions({}),
+	}: Partial<MockInteractionContructorArgs>) {
+		this.reply = reply;
+		this.followUp = followUp;
+		this.deferReply = deferReply;
+		this.channel = channel;
+		this.user = user;
+		this.options = options;
 	}
 
-	public followUp(reply: any) {
-		this.mockedResults = reply;
-	}
-
-	public getMocked(): CommandInteraction {
+	public getMock(): CommandInteraction {
 		return this as unknown as CommandInteraction;
 	}
 }

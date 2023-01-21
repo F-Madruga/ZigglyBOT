@@ -1,27 +1,30 @@
-import * as listCommand from '../../../src/commands/list-commands-command';
+import * as listCommandsCommand from '../../../src/commands/list-commands-command';
 import { Command } from '../../../src/discord-bot';
-import { MockDiscordBot, MockDiscordContext } from '../../mocks/discord';
+import { MockDiscordBot, MockContext } from '../../mocks/discord';
 
 describe('listcommands command', () => {
-	it('should return the correct command prefix', () => {
-		expect(listCommand.prefix).toEqual('listcommands');
-		expect(listCommand.data.description).toEqual('List all command');
+	it('data - should return the correct command prefix', () => {
+		expect(listCommandsCommand.prefix).toEqual('listcommands');
+		expect(listCommandsCommand.data.description).toEqual('List all command');
+		expect(listCommandsCommand.options).toEqual([]);
+		expect(listCommandsCommand.data.options.length).toEqual(0);
 	});
 
-	it('should reply a list of all available commands', async () => {
+	it('execute - should reply a list of all available commands', async () => {
 		const commands = new Map<string, Command>();
-		commands.set(listCommand.prefix, listCommand);
+		commands.set(listCommandsCommand.prefix, listCommandsCommand);
 
 		const mockDiscordBot = new MockDiscordBot({ commands });
 
-		const mockCtx = new MockDiscordContext({ discordBot: mockDiscordBot });
+		const mockCtx = new MockContext({ discordBot: mockDiscordBot });
 
-		const ctx = mockCtx.getMocked();
+		const ctx = mockCtx.getMock();
 
-		await listCommand.execute(ctx);
+		await listCommandsCommand.execute(ctx);
 
-		expect(mockCtx.interaction.mockedResults).toStrictEqual({
-			content: `1 - **${listCommand.prefix}**: ${listCommand.data.description}\n`,
+		expect(mockCtx.interaction.reply.mock.calls).toHaveLength(1);
+		expect(mockCtx.interaction.reply.mock.calls[0][0]).toStrictEqual({
+			content: `1 - **${listCommandsCommand.prefix}**: ${listCommandsCommand.data.description}\n`,
 		});
 	});
 });
