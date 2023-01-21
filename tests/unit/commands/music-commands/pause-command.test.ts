@@ -1,7 +1,7 @@
 import * as pauseCommand from '../../../../src/commands/music-commands/pause-command';
 import * as musicManager from '../../../../src/managers/music-manager';
 import sinon from 'ts-sinon';
-import { MockDiscordContext } from '../../../mocks/discord';
+import { MockContext } from '../../../mocks/discord';
 
 describe('music command - pause command', () => {
 	afterEach(() => {
@@ -18,8 +18,8 @@ describe('music command - pause command', () => {
 	it('execute - should call manager with correct parameters', async () => {
 		const musicManagerStub = sinon.stub(musicManager, 'pause');
 
-		const mockCtx = new MockDiscordContext({});
-		const ctx = mockCtx.getMocked();
+		const mockCtx = new MockContext({});
+		const ctx = mockCtx.getMock();
 
 		await pauseCommand.execute(ctx);
 

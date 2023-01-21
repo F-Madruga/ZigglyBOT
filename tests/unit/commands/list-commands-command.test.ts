@@ -1,6 +1,6 @@
 import * as listCommandsCommand from '../../../src/commands/list-commands-command';
 import { Command } from '../../../src/discord-bot';
-import { MockDiscordBot, MockDiscordContext } from '../../mocks/discord';
+import { MockDiscordBot, MockContext } from '../../mocks/discord';
 
 describe('listcommands command', () => {
 	it('data - should return the correct command prefix', () => {
@@ -16,13 +16,14 @@ describe('listcommands command', () => {
 
 		const mockDiscordBot = new MockDiscordBot({ commands });
 
-		const mockCtx = new MockDiscordContext({ discordBot: mockDiscordBot });
+		const mockCtx = new MockContext({ discordBot: mockDiscordBot });
 
-		const ctx = mockCtx.getMocked();
+		const ctx = mockCtx.getMock();
 
 		await listCommandsCommand.execute(ctx);
 
-		expect(mockCtx.interaction.mockedResults).toStrictEqual({
+		expect(mockCtx.interaction.reply.mock.calls).toHaveLength(1);
+		expect(mockCtx.interaction.reply.mock.calls[0][0]).toStrictEqual({
 			content: `1 - **${listCommandsCommand.prefix}**: ${listCommandsCommand.data.description}\n`,
 		});
 	});

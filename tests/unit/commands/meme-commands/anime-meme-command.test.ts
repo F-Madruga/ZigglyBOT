@@ -1,7 +1,7 @@
 import * as animeMemeCommand from '../../../../src/commands/meme-commands/anime-meme-command';
 import * as popcordManager from '../../../../src/managers/popcord-manager';
 import sinon from 'ts-sinon';
-import { MockDiscordContext } from '../../../mocks/discord';
+import { MockContext } from '../../../mocks/discord';
 
 describe('meme command - animememe command', () => {
 	afterEach(() => {
@@ -18,8 +18,8 @@ describe('meme command - animememe command', () => {
 	it('execute - should call manager with correct parameters', async () => {
 		const popcordManagerStub = sinon.stub(popcordManager, 'getSFWAnimeMeme');
 
-		const mockCtx = new MockDiscordContext({});
-		const ctx = mockCtx.getMocked();
+		const mockCtx = new MockContext({});
+		const ctx = mockCtx.getMock();
 
 		await animeMemeCommand.execute(ctx);
 

@@ -1,7 +1,7 @@
 import * as memeCommand from '../../../../src/commands/meme-commands/meme-command';
 import * as popcordManager from '../../../../src/managers/popcord-manager';
 import sinon from 'ts-sinon';
-import { MockDiscordContext } from '../../../mocks/discord';
+import { MockContext } from '../../../mocks/discord';
 
 describe('meme command - meme command', () => {
 	afterEach(() => {
@@ -18,8 +18,8 @@ describe('meme command - meme command', () => {
 	it('execute - should call manager with correct parameters', async () => {
 		const popcordManagerStub = sinon.stub(popcordManager, 'getSFWMeme');
 
-		const mockCtx = new MockDiscordContext({});
-		const ctx = mockCtx.getMocked();
+		const mockCtx = new MockContext({});
+		const ctx = mockCtx.getMock();
 
 		await memeCommand.execute(ctx);
 

@@ -1,7 +1,7 @@
 import * as backCommand from '../../../../src/commands/music-commands/back-command';
 import * as musicManager from '../../../../src/managers/music-manager';
 import sinon from 'ts-sinon';
-import { MockDiscordContext } from '../../../mocks/discord';
+import { MockContext } from '../../../mocks/discord';
 
 describe('music command - back command', () => {
 	afterEach(() => {
@@ -18,8 +18,8 @@ describe('music command - back command', () => {
 	it('execute - should call manager with correct parameters', async () => {
 		const musicManagerStub = sinon.stub(musicManager, 'back');
 
-		const mockCtx = new MockDiscordContext({});
-		const ctx = mockCtx.getMocked();
+		const mockCtx = new MockContext({});
+		const ctx = mockCtx.getMock();
 
 		await backCommand.execute(ctx);
 

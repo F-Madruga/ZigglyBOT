@@ -1,44 +1,35 @@
+import { getCommands } from '../../../src/commands';
+import { Command, DiscordBot } from '../../../src/discord-bot';
 import { MockClient } from './client';
+import { MockConfig } from './config';
 import { MockPlayer } from './player';
-import { DiscordConfig, DiscordBot, Command } from '../../../src/discord-bot';
 
 interface MockDiscordBotContructorArgs {
 	client: MockClient;
 	player: MockPlayer;
+	config: MockConfig;
 	commands: Map<string, Command>;
-	config: DiscordConfig;
 }
 
 export class MockDiscordBot {
-	public mockedResults: any;
-
 	public client: MockClient;
 	public player: MockPlayer;
+	public config: MockConfig;
 	public commands: Map<string, Command>;
-	public config: DiscordConfig;
 
 	constructor({
 		client = new MockClient({}),
 		player = new MockPlayer({}),
-		commands = new Map(),
-		config = {
-			token: 'token',
-			guildId: 'guildId',
-			clientId: 'clientId',
-		},
+		config = new MockConfig({}),
+		commands = getCommands(),
 	}: Partial<MockDiscordBotContructorArgs>) {
 		this.client = client;
 		this.player = player;
-		this.commands = commands;
 		this.config = config;
+		this.commands = commands;
 	}
 
-	public getMocked(): DiscordBot {
-		return {
-			client: this.client.getMocked(),
-			player: this.player.getMocked(),
-			commands: this.commands,
-			config: this.config,
-		};
+	public getMock(): DiscordBot {
+		return this as unknown as DiscordBot;
 	}
 }

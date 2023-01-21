@@ -1,12 +1,17 @@
 import { Client } from 'discord.js';
+import { MockGuildMembers } from './guild-members';
 
-interface MockClientContructorArgs {}
+interface MockClientContructorArgs {
+	guilds: MockGuildMembers;
+}
+
 export class MockClient {
-	public mockedResults: any;
+	public guilds: MockGuildMembers;
+	constructor({ guilds = new MockGuildMembers({}) }: Partial<MockClientContructorArgs>) {
+		this.guilds = guilds;
+	}
 
-	constructor({}: Partial<MockClientContructorArgs>) {}
-
-	public getMocked(): Client {
+	public getMock(): Client {
 		return this as unknown as Client;
 	}
 }

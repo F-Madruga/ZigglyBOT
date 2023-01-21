@@ -20,10 +20,12 @@ describe('parse-interaction-options', () => {
 			value: true,
 		});
 
-		const interactionOptionsMock = new MockInteractionOptions({ data: options });
+		const getMock = jest.fn((x) => options.get(x) || null);
+		const interactionOptionsMock = new MockInteractionOptions({ get: getMock });
+
 		const interactionMock = new MockInteraction({ options: interactionOptionsMock });
 
-		const interaction = interactionMock.getMocked();
+		const interaction = interactionMock.getMock();
 
 		const result = parseInteractionOptions(interaction, [...options.keys()]);
 

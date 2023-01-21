@@ -1,7 +1,7 @@
 import * as clearCommand from '../../../../src/commands/music-commands/clear-command';
 import * as musicManager from '../../../../src/managers/music-manager';
 import sinon from 'ts-sinon';
-import { MockDiscordContext } from '../../../mocks/discord';
+import { MockContext } from '../../../mocks/discord';
 
 describe('music command - clear command', () => {
 	afterEach(() => {
@@ -18,8 +18,8 @@ describe('music command - clear command', () => {
 	it('execute - should call manager with correct parameters', async () => {
 		const musicManagerStub = sinon.stub(musicManager, 'clear');
 
-		const mockCtx = new MockDiscordContext({});
-		const ctx = mockCtx.getMocked();
+		const mockCtx = new MockContext({});
+		const ctx = mockCtx.getMock();
 
 		await clearCommand.execute(ctx);
 

@@ -2,7 +2,7 @@ import * as playCommand from '../../../../src/commands/music-commands/play-comma
 import * as musicManager from '../../../../src/managers/music-manager';
 import * as parseInteractionOptions from '../../../../src/tools/parse-interaction-options';
 import sinon from 'ts-sinon';
-import { MockDiscordContext } from '../../../mocks/discord';
+import { MockContext } from '../../../mocks/discord';
 
 describe('music command - play command', () => {
 	afterEach(() => {
@@ -47,8 +47,8 @@ describe('music command - play command', () => {
 		sinon.stub(parseInteractionOptions, 'parseInteractionOptions').returns({ query });
 		sinon.stub(playCommand, 'validateCommandArgs').returns({ query });
 
-		const mockCtx = new MockDiscordContext({});
-		const ctx = mockCtx.getMocked();
+		const mockCtx = new MockContext({});
+		const ctx = mockCtx.getMock();
 
 		await playCommand.execute(ctx);
 
