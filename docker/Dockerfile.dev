@@ -8,4 +8,4 @@ COPY .env.example ./
 
 COPY src ./src
 
-CMD ["npm","run","start"]
+CMD ["npm","run","dev"]

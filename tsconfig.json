@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+		"experimentalDecorators": true,
 		"lib": ["ES2022"],
 		"target": "ES2022",
 		"module": "commonjs",
@@ -10,7 +11,9 @@
 		"incremental": true,
 		"skipLibCheck": true,
 		"useUnknownInCatchVariables": false,
-		"resolveJsonModule": true
+		"resolveJsonModule": true,
+		"emitDecoratorMetadata": true,
+		"strictPropertyInitialization": false
 	},
 	"include": ["./src"]
 }
