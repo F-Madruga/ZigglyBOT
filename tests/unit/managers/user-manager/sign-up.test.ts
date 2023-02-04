@@ -53,7 +53,7 @@ describe('user manager - signUp', () => {
 
 		expect(mockCtx.interaction.reply.mock.calls).toHaveLength(1);
 		expect(mockCtx.interaction.reply.mock.calls[0][0]).toStrictEqual({
-			content: 'You already have an account',
+			content: 'You already have an account ',
 			ephemeral: true,
 		});
 
