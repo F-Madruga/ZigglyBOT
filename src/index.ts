@@ -1,16 +1,28 @@
 import { CLIENT_ID, DISCORD_TOKEN, GUILD_ID, NodeEnv, NODE_ENV } from './constants';
-import { db } from './db';
+import db from './db';
 import { createDiscordBot, deployCommands, runCommand } from './discord-bot';
 import { logger } from './tools/logger';
 
 async function main() {
-	db.initialize()
-		.then(() => {
-			logger.info('Data Source has been initialized');
-		})
-		.catch((err) => {
-			logger.error(`Error during Data Source initialization ${err}`);
-		});
+	try {
+		await db.initialize();
+		logger.info('Data Source has been initialized successfully');
+	} catch (error) {
+		logger.error(`Error during Data Source initialization ${error}`);
+	}
+
+	try {
+		const pendingMigrations = await db.runMigrations();
+		logger.info(
+			`The following migrations were executed successfully:\n${JSON.stringify(
+				pendingMigrations,
+				null,
+				2,
+			)}`,
+		);
+	} catch (error) {
+		logger.error(`Error running migrations ${error}`);
+	}
 
 	const discordBot = createDiscordBot(
 		{

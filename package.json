@@ -19,6 +19,7 @@
       "dev:docker:up": "docker-compose -f docker/docker-compose.dev.yml up --build",
       "dev:docker:down": "docker-compose -f docker/docker-compose.dev.yml down --rmi all",
       "deploy:commands": "tsc && node dist/tools/deploy-commands.js",
+      "typeorm:generate": "npx typeorm migration:generate -d ./dist/db.js",
       "test": "jest",
       "test:watch": "jest --watch",
       "coverage": "jest --coverage",
