@@ -8,6 +8,7 @@ import {
 	Routes,
 	SlashCommandBuilder,
 } from 'discord.js';
+import { DataSource } from 'typeorm';
 import { getCommands } from './commands';
 import { logger } from './tools/logger';
 
@@ -35,9 +36,13 @@ export interface DiscordBot {
 	player: Player;
 	commands: Map<string, Command>;
 	config: DiscordConfig;
+	db: DataSource;
 }
 
-export function createDiscordBot({ token, clientId, guildId }: DiscordConfig): DiscordBot {
+export function createDiscordBot(
+	{ token, clientId, guildId }: DiscordConfig,
+	db: DataSource,
+): DiscordBot {
 	const client = new Client({
 		intents: [
 			GatewayIntentBits.Guilds,
@@ -65,6 +70,7 @@ export function createDiscordBot({ token, clientId, guildId }: DiscordConfig): D
 			clientId,
 			guildId,
 		},
+		db,
 	};
 
 	return discordBot;
