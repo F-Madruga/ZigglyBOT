@@ -8,8 +8,8 @@ export function createUser({
 	profileImageUrl = 'profileImageUrl',
 	createdAt = new Date('07/21/2021 04:24:37'),
 	updatedAt = new Date('01/04/2022 01:10:05'),
-}: Partial<User>): User {
-	return User.create({
+}: Partial<User>) {
+	return {
 		uuid,
 		username,
 		discriminator,
@@ -17,5 +17,5 @@ export function createUser({
 		profileImageUrl,
 		createdAt,
 		updatedAt,
-	});
+	} as User;
 }

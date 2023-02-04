@@ -3,7 +3,6 @@ import path from 'path';
 import { DataSource } from 'typeorm';
 import { DATABASE_URL, NodeEnv, NODE_ENV } from './constants';
 import { User } from './entities/user';
-import { logger } from './tools/logger';
 
 export default new DataSource({
 	type: 'postgres',
