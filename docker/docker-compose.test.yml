@@ -1,0 +1,43 @@
+version: '3.7'
+
+services:
+  zigglybot:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile.test
+    image: zigglybot_test
+    container_name: zigglybot_test
+    networks:
+      - zigglybot_test_network
+    stdin_open: true
+    tty: true
+    depends_on:
+      zigglybot_db:
+        condition: service_healthy
+    environment:
+      - NODE_ENV=test
+      - DATABASE_URL=postgresql://postgres:postgres@zigglybot_db_test:5432/zigglybot
+      - LOGGER_LEVEL=error
+      - DISCORD_TOKEN=token
+      - CLIENT_ID=clientId
+      - GUILD_ID=guildId
+
+  zigglybot_db:
+    image: postgres:15.1-alpine
+    container_name: zigglybot_db_test
+    environment:
+      - POSTGRES_DB=zigglybot_test
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - zigglybot_test_network
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  zigglybot_test_network:

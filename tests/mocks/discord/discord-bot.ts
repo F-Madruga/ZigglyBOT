@@ -32,6 +32,7 @@ export class MockDiscordBot {
 		this.player = player;
 		this.config = config;
 		this.commands = commands;
+		this.db = db;
 	}
 
 	public getMock(): DiscordBot {

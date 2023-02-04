@@ -1,4 +1,5 @@
 import { DiscordConfig } from '../../../src/discord-bot';
+import { CLIENT_ID, DISCORD_TOKEN, GUILD_ID } from '../../../src/constants';
 
 interface MockConfigContructorArgs {
 	token: string;
@@ -12,9 +13,9 @@ export class MockConfig {
 	public clientId: string;
 
 	constructor({
-		token = 'token',
-		guildId = 'guildId',
-		clientId = 'clientId',
+		token = DISCORD_TOKEN || 'token',
+		guildId = GUILD_ID || 'guildId',
+		clientId = CLIENT_ID || 'clientId',
 	}: Partial<MockConfigContructorArgs>) {
 		this.token = token;
 		this.guildId = guildId;

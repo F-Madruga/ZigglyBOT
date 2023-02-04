@@ -21,6 +21,8 @@
       "deploy:commands": "tsc && node dist/tools/deploy-commands.js",
       "typeorm:generate": "npx typeorm migration:generate -d ./dist/db.js",
       "test": "jest",
+      "test:docker:up": "docker-compose -f docker/docker-compose.test.yml up --build --exit-code-from zigglybot",
+      "test:docker:down": "docker-compose -f docker/docker-compose.test.yml down --rmi all",
       "test:watch": "jest --watch",
       "coverage": "jest --coverage",
       "format": "prettier --write .",

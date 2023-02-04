@@ -1,7 +1,6 @@
 import 'reflect-metadata';
-import path from 'path';
 import { DataSource } from 'typeorm';
-import { DATABASE_URL, NodeEnv, NODE_ENV } from './constants';
+import { DATABASE_URL, MIGRATIONS_PATH, NodeEnv, NODE_ENV } from './constants';
 import { User } from './entities/user';
 
 export default new DataSource({
@@ -11,6 +10,6 @@ export default new DataSource({
 	dropSchema: NODE_ENV === NodeEnv.test,
 	synchronize: false,
 	migrationsTableName: 'migrations',
-	migrations: [path.join(__dirname, './migration/*')],
+	migrations: [MIGRATIONS_PATH],
 	entities: [User],
 });
